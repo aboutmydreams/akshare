@@ -36,8 +36,8 @@ def fund_manager(adjust: str = "0") -> pd.DataFrame:
     data_text = r.text
     data_json = demjson.decode(data_text.strip("var returnjson= "))
     total_page = data_json["pages"]
+    url = "http://fund.eastmoney.com/Data/FundDataPortfolio_Interface.aspx"
     for page in tqdm(range(1, total_page + 1), leave=False):
-        url = "http://fund.eastmoney.com/Data/FundDataPortfolio_Interface.aspx"
         params = {
             "dt": "14",
             "mc": "returnjson",

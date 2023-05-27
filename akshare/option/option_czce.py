@@ -45,8 +45,7 @@ def option_czce_hist(symbol: str = "SR", year: str = "2021") -> pd.DataFrame:
     warnings.warn("正在下载中, 请稍等")
     url = f'http://www.czce.com.cn/cn/DFSStaticFiles/Option/2021/OptionDataAllHistory/{symbol}OPTIONS{year}.txt'
     r = requests.get(url)
-    option_df = pd.read_table(StringIO(r.text), skiprows=1, sep="|", low_memory=False)
-    return option_df
+    return pd.read_table(StringIO(r.text), skiprows=1, sep="|", low_memory=False)
 
 
 if __name__ == "__main__":

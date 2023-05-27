@@ -24,10 +24,7 @@ def _replace_comma(x):
     :return: 处理后的值或原值
     :rtype: str
     """
-    if "," in str(x):
-        return str(x).replace(",", "")
-    else:
-        return x
+    return str(x).replace(",", "") if "," in str(x) else x
 
 
 def get_hk_index_page_count() -> int:
@@ -41,10 +38,7 @@ def get_hk_index_page_count() -> int:
         "https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getNameCount?node=zs_hk"
     )
     page_count = int(re.findall(re.compile(r"\d+"), res.text)[0]) / 80
-    if isinstance(page_count, int):
-        return page_count
-    else:
-        return int(page_count) + 1
+    return page_count if isinstance(page_count, int) else int(page_count) + 1
 
 
 def stock_hk_index_spot_sina() -> pd.DataFrame:

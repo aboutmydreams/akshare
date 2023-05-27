@@ -106,10 +106,7 @@ def crypto_name_url_table(symbol: str = "web") -> pd.DataFrame:
         total_page = math.ceil(int(data_json['recordsTotal']) / 100)
         big_df = pd.DataFrame()
         for page in tqdm(range(1, total_page+1), leave=False):
-            payload.update({
-                "start": (page-1)*100,
-                'length': 100
-            })
+            payload |= {"start": (page - 1) * 100, 'length': 100}
             r = requests.post(url, data=payload, headers=headers)
             data_json = r.json()
             temp_df = pd.DataFrame(data_json['data'])
@@ -124,8 +121,7 @@ def crypto_name_url_table(symbol: str = "web") -> pd.DataFrame:
         return big_df
     else:
         get_crypto_info_csv_path = get_crypto_info_csv()
-        name_url_df = pd.read_csv(get_crypto_info_csv_path)
-        return name_url_df
+        return pd.read_csv(get_crypto_info_csv_path)
 
 
 def crypto_hist(

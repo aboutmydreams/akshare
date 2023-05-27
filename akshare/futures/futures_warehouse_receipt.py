@@ -78,10 +78,7 @@ def futures_dce_warehouse_receipt(trade_date: str = "20200702") -> dict:
     index_list.insert(0, 0)
     big_dict = {}
     for inner_index in range(len(index_list) - 1):
-        if inner_index == 0:
-            temp_index = 0
-        else:
-            temp_index = index_list[inner_index] + 1
+        temp_index = 0 if inner_index == 0 else index_list[inner_index] + 1
         inner_df = temp_df[temp_index : index_list[inner_index + 1] + 1]
         inner_key = inner_df.iloc[0, 0]
         inner_df.reset_index(inplace=True, drop=True)
@@ -116,9 +113,10 @@ def futures_shfe_warehouse_receipt(trade_date: str = "20200702") -> dict:
         temp_df["WHABBRNAME"] = (
             temp_df["WHABBRNAME"].str.split(r"$", expand=True).iloc[:, 0]
         )
-        big_dict = {}
-        for item in set(temp_df["VARNAME"]):
-            big_dict[item] = temp_df[temp_df["VARNAME"] == item]
+        big_dict = {
+            item: temp_df[temp_df["VARNAME"] == item]
+            for item in set(temp_df["VARNAME"])
+        }
     else:
         url = f"http://www.shfe.com.cn/data/dailydata/{trade_date}dailystock.html"
         r = requests.get(url, headers=headers)

@@ -28,36 +28,24 @@ def crypto_crix(symbol: str = "CRIX") -> pd.DataFrame:
     data_text = soup.find_all("script")[12].string
     if symbol == "CRIX":
         inner_text = data_text[data_text.find("series") : data_text.find("CRIX")]
-        temp_df = pd.DataFrame(
-            list(
-                eval(
-                    inner_text[
-                        inner_text.find("data") + 5 : inner_text.find("name")
-                    ].strip()
-                )
-            )[0]
-        )
-        temp_df.columns = ["date", "value"]
-        temp_df["date"] = pd.to_datetime(temp_df["date"], unit="ms").dt.date
-        return temp_df
-
     else:
         data_text = data_text[
             data_text.find("VCRIX IndeX") : data_text.find("2014-11-28")
         ]
         inner_text = data_text[data_text.find("series") : data_text.find('"VCRIX"')]
-        temp_df = pd.DataFrame(
-            list(
-                eval(
-                    inner_text[
-                        inner_text.find("data") + 5 : inner_text.find("name")
-                    ].strip()
-                )
-            )[0]
-        )
-        temp_df.columns = ["date", "value"]
-        temp_df["date"] = pd.to_datetime(temp_df["date"], unit="ms").dt.date
-        return temp_df
+
+    temp_df = pd.DataFrame(
+        list(
+            eval(
+                inner_text[
+                    inner_text.find("data") + 5 : inner_text.find("name")
+                ].strip()
+            )
+        )[0]
+    )
+    temp_df.columns = ["date", "value"]
+    temp_df["date"] = pd.to_datetime(temp_df["date"], unit="ms").dt.date
+    return temp_df
 
 
 if __name__ == "__main__":

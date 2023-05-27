@@ -22,8 +22,12 @@ def get_sys_spot_futures_dict() -> dict:
     res = requests.get(url)
     soup = BeautifulSoup(res.text, "lxml")
     temp_item = soup.find("div", attrs={"class": "q8"}).find_all("li")
-    name_url_dict = dict(zip([item.find("a").get_text().strip() for item in temp_item], [item.find("a")["href"] for item in temp_item]))
-    return name_url_dict
+    return dict(
+        zip(
+            [item.find("a").get_text().strip() for item in temp_item],
+            [item.find("a")["href"] for item in temp_item],
+        )
+    )
 
 
 def get_sys_spot_futures(symbol: str = "铜") -> pd.DataFrame:

@@ -22,17 +22,14 @@ def bond_info_cm_query(symbol: str = "评级等级") -> pd.DataFrame:
     :return: 查询相关指标的参数
     :rtype: pandas.DataFrame
     """
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+    }
     if symbol == "主承销商":
         url = "https://www.chinamoney.com.cn/ags/ms/cm-u-bond-md/EntyFullNameSearchCondition"
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
-        }
         r = requests.post(url, headers=headers)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["enty"])
-        temp_df.columns = ["code", "name"]
-        temp_df = temp_df[["name", "code"]]
-        return temp_df
     else:
         symbol_map = {
             "债券类型": "bondType",
@@ -41,18 +38,16 @@ def bond_info_cm_query(symbol: str = "评级等级") -> pd.DataFrame:
             "评级等级": "bondRtngShrt",
         }
         url = "https://www.chinamoney.com.cn/ags/ms/cm-u-bond-md/BondBaseInfoSearchCondition"
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
-        }
         r = requests.post(url, headers=headers)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"][f"{symbol_map[symbol]}"])
         if temp_df.shape[1] == 1:
             temp_df.columns = ["name"]
             temp_df["code"] = temp_df["name"]
-        temp_df.columns = ["code", "name"]
-        temp_df = temp_df[["name", "code"]]
-        return temp_df
+
+    temp_df.columns = ["code", "name"]
+    temp_df = temp_df[["name", "code"]]
+    return temp_df
 
 
 @functools.lru_cache()
@@ -134,7 +129,7 @@ def bond_info_cm(
     total_page = data_json["data"]["pageTotal"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        payload.update({"pageNo": page})
+        payload["pageNo"] = page
         r = requests.post(url, data=payload, headers=headers)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["resultList"])

@@ -15,8 +15,7 @@ def pro_api(token=''):
     if token == '' or token is None:
         token = token_process.get_token()
     if token is not None and token != '':
-        pro = client.DataApi(token)
-        return pro
+        return client.DataApi(token)
     else:
         raise Exception('api init error.')
 

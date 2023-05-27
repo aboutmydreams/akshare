@@ -32,10 +32,7 @@ def _replace_comma(x):
     :return: 处理后的值或原值
     :rtype: str
     """
-    if "," in str(x):
-        return str(x).replace(",", "")
-    else:
-        return x
+    return str(x).replace(",", "") if "," in str(x) else x
 
 
 def get_zh_index_page_count() -> int:
@@ -47,10 +44,7 @@ def get_zh_index_page_count() -> int:
     """
     res = requests.get(zh_sina_index_stock_count_url)
     page_count = int(re.findall(re.compile(r"\d+"), res.text)[0]) / 80
-    if isinstance(page_count, int):
-        return page_count
-    else:
-        return int(page_count) + 1
+    return page_count if isinstance(page_count, int) else int(page_count) + 1
 
 
 def stock_zh_index_spot() -> pd.DataFrame:
@@ -168,12 +162,10 @@ def _get_tx_start_year(symbol: str = "sh000919") -> pd.DataFrame:
         }
         r = requests.get(url, params=params)
         data_text = r.text
-        start_date = demjson.decode(data_text[data_text.find("={") + 1 :])["data"][
+        return demjson.decode(data_text[data_text.find("={") + 1 :])["data"][
             symbol
         ]["day"][0][0]
-        return start_date
-    start_date = demjson.decode(data_text[data_text.find("={") + 1 :])["data"][0][0]
-    return start_date
+    return demjson.decode(data_text[data_text.find("={") + 1 :])["data"][0][0]
 
 
 def stock_zh_index_daily_tx(symbol: str = "sz980017") -> pd.DataFrame:
@@ -209,11 +201,9 @@ def stock_zh_index_daily_tx(symbol: str = "sz980017") -> pd.DataFrame:
                 demjson.decode(text[text.find("={") + 1 :])["data"][symbol]["qfqday"]
             )
         temp_df = pd.concat([temp_df, inner_temp_df], ignore_index=True)
-    if temp_df.shape[1] == 6:
-        temp_df.columns = ["date", "open", "close", "high", "low", "amount"]
-    else:
+    if temp_df.shape[1] != 6:
         temp_df = temp_df.iloc[:, :6]
-        temp_df.columns = ["date", "open", "close", "high", "low", "amount"]
+    temp_df.columns = ["date", "open", "close", "high", "low", "amount"]
     temp_df["date"] = pd.to_datetime(temp_df["date"]).dt.date
     temp_df["open"] = pd.to_numeric(temp_df["open"])
     temp_df["close"] = pd.to_numeric(temp_df["close"])

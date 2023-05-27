@@ -307,7 +307,7 @@ def fund_open_fund_daily_em() -> pd.DataFrame:
         "-",
         "-",
     ]
-    data_df = temp_df[
+    return temp_df[
         [
             "基金代码",
             "基金简称",
@@ -322,7 +322,6 @@ def fund_open_fund_daily_em() -> pd.DataFrame:
             "手续费",
         ]
     ]
-    return data_df
 
 
 def fund_open_fund_info_em(
@@ -513,20 +512,12 @@ def fund_open_fund_info_em(
         url = f"http://fundf10.eastmoney.com/fhsp_{fund}.html"
         r = requests.get(url, headers=headers)
         temp_df = pd.read_html(r.text)[1]
-        if temp_df.iloc[0, 1] == "暂无分红信息!":
-            return None
-        else:
-            return temp_df
-
-    # 拆分详情
-    if indicator == "拆分详情":
+        return None if temp_df.iloc[0, 1] == "暂无分红信息!" else temp_df
+    elif indicator == "拆分详情":
         url = f"http://fundf10.eastmoney.com/fhsp_{fund}.html"
         r = requests.get(url, headers=headers)
         temp_df = pd.read_html(r.text)[2]
-        if temp_df.iloc[0, 1] == "暂无拆分信息!":
-            return None
-        else:
-            return temp_df
+        return None if temp_df.iloc[0, 1] == "暂无拆分信息!" else temp_df
 
 
 def fund_money_fund_daily_em() -> pd.DataFrame:
@@ -668,7 +659,7 @@ def fund_financial_fund_daily_em() -> pd.DataFrame:
         f"{show_day[1]}-万份收益",
         f"{show_day[1]}-7日年华",
     ]
-    data_df = data_df[
+    return data_df[
         [
             "序号",
             "基金代码",
@@ -682,7 +673,6 @@ def fund_financial_fund_daily_em() -> pd.DataFrame:
             "申购状态",
         ]
     ]
-    return data_df
 
 
 def fund_financial_fund_info_em(symbol: str = "000134") -> pd.DataFrame:
@@ -786,7 +776,7 @@ def fund_graded_fund_daily_em() -> pd.DataFrame:
         "-",
         "手续费",
     ]
-    data_df = temp_df[
+    return temp_df[
         [
             "基金代码",
             "基金简称",
@@ -801,7 +791,6 @@ def fund_graded_fund_daily_em() -> pd.DataFrame:
             "手续费",
         ]
     ]
-    return data_df
 
 
 def fund_graded_fund_info_em(fund: str = "150232") -> pd.DataFrame:

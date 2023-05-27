@@ -43,14 +43,7 @@ def futures_comex_inventory(symbol: str = "黄金") -> pd.DataFrame:
     temp_df["DATADATE"] = pd.to_datetime(temp_df["DATADATE"]).dt.date
     temp_df.reset_index(inplace=True)
     temp_df['index'] = range(1, len(temp_df)+1)
-    if symbol == "黄金":
-        temp_df.columns = [
-            '序号',
-            '日期',
-            f'COMEX{symbol}库存量_1',
-            f'COMEX{symbol}库存量_2',
-        ]
-    elif symbol == "白银":
+    if symbol in {"黄金", "白银"}:
         temp_df.columns = [
             '序号',
             '日期',

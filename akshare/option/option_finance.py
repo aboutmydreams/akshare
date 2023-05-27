@@ -33,43 +33,28 @@ def option_finance_underlying(symbol: str = "50ETF") -> pd.DataFrame:
         data_json = res.json()
         raw_data = pd.DataFrame(data_json["list"])
         raw_data.at[0, 0] = "510050"
-        raw_data.at[0, 8] = pd.to_datetime(
-            str(data_json["date"]) + str(data_json["time"]),
-            format="%Y%m%d%H%M%S",
-        )
-        raw_data.columns = [
-            "代码",
-            "名称",
-            "当前价",
-            "涨跌",
-            "涨跌幅",
-            "振幅",
-            "成交量(手)",
-            "成交额(万元)",
-            "更新日期",
-        ]
-        return raw_data
     else:
         res = requests.get(SH_OPTION_URL_300, params=SH_OPTION_PAYLOAD)
         data_json = res.json()
         raw_data = pd.DataFrame(data_json["list"])
         raw_data.at[0, 0] = "510300"
-        raw_data.at[0, 8] = pd.to_datetime(
-            str(data_json["date"]) + str(data_json["time"]),
-            format="%Y%m%d%H%M%S",
-        )
-        raw_data.columns = [
-            "代码",
-            "名称",
-            "当前价",
-            "涨跌",
-            "涨跌幅",
-            "振幅",
-            "成交量(手)",
-            "成交额(万元)",
-            "更新日期",
-        ]
-        return raw_data
+
+    raw_data.at[0, 8] = pd.to_datetime(
+        str(data_json["date"]) + str(data_json["time"]),
+        format="%Y%m%d%H%M%S",
+    )
+    raw_data.columns = [
+        "代码",
+        "名称",
+        "当前价",
+        "涨跌",
+        "涨跌幅",
+        "振幅",
+        "成交量(手)",
+        "成交额(万元)",
+        "更新日期",
+    ]
+    return raw_data
 
 
 def option_finance_board(

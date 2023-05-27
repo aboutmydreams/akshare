@@ -30,7 +30,7 @@ def _get_global_country_name_url() -> dict:
     url_list = [item["value"] for item in name_url_option_list]
     name_list = [item.get_text() for item in name_url_option_list]
     name_code_map_dict = {}
-    name_code_map_dict.update(zip(name_list, url_list))
+    name_code_map_dict |= zip(name_list, url_list)
     return name_code_map_dict
 
 
@@ -53,7 +53,7 @@ def bond_investing_global_country_name_url(country: str = "中国") -> dict:
         for item in soup.find_all(attrs={"class": "plusIconTd"})
     ]
     name_code_map_dict = {}
-    name_code_map_dict.update(zip(name_list, url_list))
+    name_code_map_dict |= zip(name_list, url_list)
     return name_code_map_dict
 
 

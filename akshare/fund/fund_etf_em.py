@@ -37,8 +37,7 @@ def _fund_etf_code_id_map_em() -> dict:
     r = requests.get(url, params=params)
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["diff"])
-    temp_dict = dict(zip(temp_df["f12"], temp_df["f13"]))
-    return temp_dict
+    return dict(zip(temp_df["f12"], temp_df["f13"]))
 
 
 def fund_etf_spot_em() -> pd.DataFrame:
@@ -214,11 +213,6 @@ def fund_etf_hist_min_em(
     :rtype: pandas.DataFrame
     """
     code_id_dict = _fund_etf_code_id_map_em()
-    adjust_map = {
-        "": "0",
-        "qfq": "1",
-        "hfq": "2",
-    }
     if period == "1":
         url = "https://push2his.eastmoney.com/api/qt/stock/trends2/get"
         params = {
@@ -256,9 +250,13 @@ def fund_etf_hist_min_em(
         temp_df["成交额"] = pd.to_numeric(temp_df["成交额"])
         temp_df["最新价"] = pd.to_numeric(temp_df["最新价"])
         temp_df["时间"] = pd.to_datetime(temp_df["时间"]).astype(str)
-        return temp_df
     else:
         url = "http://push2his.eastmoney.com/api/qt/stock/kline/get"
+        adjust_map = {
+            "": "0",
+            "qfq": "1",
+            "hfq": "2",
+        }
         params = {
             "fields1": "f1,f2,f3,f4,f5,f6",
             "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
@@ -317,7 +315,8 @@ def fund_etf_hist_min_em(
                 "换手率",
             ]
         ]
-        return temp_df
+
+    return temp_df
 
 
 if __name__ == "__main__":

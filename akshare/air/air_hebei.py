@@ -31,7 +31,7 @@ def air_quality_hebei(symbol: str = "唐山市") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "http://110.249.223.67/server/api/CityPublishInfo/GetProvinceAndCityPublishData"
-    params = {"publishDate": f"{datetime.today().strftime('%Y-%m-%d')} 16:00:00"}
+    params = {"publishDate": f"{datetime.now().strftime('%Y-%m-%d')} 16:00:00"}
     r = requests.get(url, params=params)
     json_data = r.json()
     city_list = pd.DataFrame.from_dict(json_data["cityPublishDatas"], orient="columns")[
@@ -44,8 +44,8 @@ def air_quality_hebei(symbol: str = "唐山市") -> pd.DataFrame:
             index=city_list,
         )
         outer_df = pd.concat([outer_df, inner_df])
-    if symbol == "":
-        temp_df = outer_df.reset_index()
+    temp_df = outer_df.reset_index()
+    if not symbol:
         temp_df.columns = [
             'city',
             'date',
@@ -57,9 +57,7 @@ def air_quality_hebei(symbol: str = "唐山市") -> pd.DataFrame:
         temp_df['date'] = pd.to_datetime(temp_df['date']).dt.date
         temp_df['minaqi'] = pd.to_numeric(temp_df['minaqi'])
         temp_df['maxaqi'] = pd.to_numeric(temp_df['maxaqi'])
-        return temp_df
     else:
-        temp_df = outer_df.reset_index()
         temp_df.columns = [
             'city',
             'date',
@@ -73,7 +71,8 @@ def air_quality_hebei(symbol: str = "唐山市") -> pd.DataFrame:
         temp_df['maxaqi'] = pd.to_numeric(temp_df['maxaqi'])
         temp_df = temp_df[temp_df['city'] == symbol]
         temp_df.reset_index(inplace=True, drop=True)
-        return temp_df
+
+    return temp_df
 
 
 if __name__ == "__main__":

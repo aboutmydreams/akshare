@@ -35,7 +35,7 @@ def get_roll_yield(date=None, var="BB", symbol1=None, symbol2=None, df=None):
         cons.convert_date(date) if date is not None else datetime.date.today()
     )
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return None
     if symbol1:
         var = symbol_varieties(symbol1)
@@ -63,15 +63,16 @@ def get_roll_yield(date=None, var="BB", symbol1=None, symbol2=None, df=None):
     a_1 = int(a[:-2])
     a_2 = int(a[-2:])
     b = re.sub(r"\D", "", symbol2)
+    if close1 == 0 or close2 == 0:
+        return False
     b_1 = int(b[:-2])
     b_2 = int(b[-2:])
     c = (a_1 - b_1) * 12 + (a_2 - b_2)
-    if close1 == 0 or close2 == 0:
-        return False
-    if c > 0:
-        return math.log(close2 / close1) / c * 12, symbol2, symbol1
-    else:
-        return math.log(close2 / close1) / c * 12, symbol1, symbol2
+    return (
+        (math.log(close2 / close1) / c * 12, symbol2, symbol1)
+        if c > 0
+        else (math.log(close2 / close1) / c * 12, symbol1, symbol2)
+    )
 
 
 def get_roll_yield_bar(
@@ -133,8 +134,7 @@ def get_roll_yield_bar(
                 var_list.remove(i_remove)
         df_l = pd.DataFrame()
         for var in var_list:
-            ry = get_roll_yield(date, var, df=df)
-            if ry:
+            if ry := get_roll_yield(date, var, df=df):
                 df_l = pd.concat(
                     [
                         df_l,
@@ -153,8 +153,7 @@ def get_roll_yield_bar(
         df_l = pd.DataFrame()
         while start_day <= end_day:
             try:
-                ry = get_roll_yield(start_day, var)
-                if ry:
+                if ry := get_roll_yield(start_day, var):
                     df_l = pd.concat(
                         [
                             df_l,

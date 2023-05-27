@@ -73,8 +73,7 @@ def macro_germany_ifo() -> pd.DataFrame:
     :return: IFO商业景气指数
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG00179154")
-    return temp_df
+    return macro_germany_core(symbol="EMG00179154")
 
 
 # 东方财富-德国-经济数据-消费者物价指数月率终值
@@ -85,8 +84,7 @@ def macro_germany_cpi_monthly() -> pd.DataFrame:
     :return: 消费者物价指数月率终值
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG00009758")
-    return temp_df
+    return macro_germany_core(symbol="EMG00009758")
 
 
 # 东方财富-德国-经济数据-消费者物价指数年率终值
@@ -97,8 +95,7 @@ def macro_germany_cpi_yearly() -> pd.DataFrame:
     :return: 消费者物价指数年率终值
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG00009756")
-    return temp_df
+    return macro_germany_core(symbol="EMG00009756")
 
 
 # 东方财富-德国-经济数据-贸易帐(季调后)
@@ -109,8 +106,7 @@ def macro_germany_trade_adjusted() -> pd.DataFrame:
     :return: 贸易帐(季调后)
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG00009753")
-    return temp_df
+    return macro_germany_core(symbol="EMG00009753")
 
 
 # 东方财富-德国-经济数据-GDP
@@ -121,8 +117,7 @@ def macro_germany_gdp() -> pd.DataFrame:
     :return: GDP
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG00009720")
-    return temp_df
+    return macro_germany_core(symbol="EMG00009720")
 
 
 # 东方财富-德国-经济数据-实际零售销售月率
@@ -133,8 +128,7 @@ def macro_germany_retail_sale_monthly() -> pd.DataFrame:
     :return: 实际零售销售月率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG01333186")
-    return temp_df
+    return macro_germany_core(symbol="EMG01333186")
 
 
 # 东方财富-德国-经济数据-实际零售销售年率
@@ -145,8 +139,7 @@ def macro_germany_retail_sale_yearly() -> pd.DataFrame:
     :return: 实际零售销售年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG01333192")
-    return temp_df
+    return macro_germany_core(symbol="EMG01333192")
 
 
 # 东方财富-德国-经济数据-ZEW 经济景气指数
@@ -157,8 +150,7 @@ def macro_germany_zew() -> pd.DataFrame:
     :return: ZEW 经济景气指数
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_germany_core(symbol="EMG00172577")
-    return temp_df
+    return macro_germany_core(symbol="EMG00172577")
 
 
 if __name__ == "__main__":

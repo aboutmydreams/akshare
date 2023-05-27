@@ -22,7 +22,7 @@ def futures_foreign_hist(symbol: str = "ZSD") -> pd.DataFrame:
     :return: historical data from 2010
     :rtype: pandas.DataFrame
     """
-    today = f'{datetime.today().year}_{datetime.today().month}_{datetime.today().day}'
+    today = f'{datetime.now().year}_{datetime.now().month}_{datetime.now().day}'
     url = f"https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_S{today}=/GlobalFuturesService.getGlobalFuturesDailyKLine"
     params = {
         "symbol": symbol,
@@ -31,8 +31,7 @@ def futures_foreign_hist(symbol: str = "ZSD") -> pd.DataFrame:
     }
     r = requests.get(url, params=params)
     data_text = r.text
-    data_df = pd.read_json(data_text[data_text.find("["):-2])
-    return data_df
+    return pd.read_json(data_text[data_text.find("["):-2])
 
 
 def futures_foreign_detail(symbol: str = "ZSD") -> pd.DataFrame:
@@ -47,8 +46,7 @@ def futures_foreign_detail(symbol: str = "ZSD") -> pd.DataFrame:
     r = requests.get(url)
     r.encoding = "gbk"
     data_text = r.text
-    data_df = pd.read_html(data_text)[6]
-    return data_df
+    return pd.read_html(data_text)[6]
 
 
 if __name__ == '__main__':

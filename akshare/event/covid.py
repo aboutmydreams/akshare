@@ -82,8 +82,6 @@ def covid_19_risk_area(symbol: str = "高风险等级地区") -> pd.DataFrame:
         temp_df["grade"] = "高风险"
         temp_df["report_date"] = data_json["data"]["end_update_time"]
         temp_df["number"] = data_json["data"]["hcount"]
-        temp_df.reset_index(inplace=True, drop=True)
-        return temp_df
     elif symbol == "低风险等级地区":
         temp_df = pd.DataFrame(data_json["data"]["lowlist"])
         temp_df = temp_df.explode(["communitys"])
@@ -91,8 +89,6 @@ def covid_19_risk_area(symbol: str = "高风险等级地区") -> pd.DataFrame:
         temp_df["grade"] = "低风险"
         temp_df["report_date"] = data_json["data"]["end_update_time"]
         temp_df["number"] = data_json["data"]["lcount"]
-        temp_df.reset_index(inplace=True, drop=True)
-        return temp_df
     else:
         temp_df = pd.DataFrame(data_json["data"]["middlelist"])
         temp_df = temp_df.explode(["communitys"])
@@ -100,8 +96,9 @@ def covid_19_risk_area(symbol: str = "高风险等级地区") -> pd.DataFrame:
         temp_df["grade"] = "中风险"
         temp_df["report_date"] = data_json["data"]["end_update_time"]
         temp_df["number"] = data_json["data"]["mcount"]
-        temp_df.reset_index(inplace=True, drop=True)
-        return temp_df
+
+    temp_df.reset_index(inplace=True, drop=True)
+    return temp_df
 
 
 def covid_19_163(indicator: str = "实时") -> pd.DataFrame:
@@ -414,18 +411,18 @@ def covid_19_dxy(indicator: str = "浙江省") -> pd.DataFrame:
         return domestic_province_df
     if indicator == "中国疫情分市统计详情":
         return domestic_city_df
-    elif indicator == "全球疫情分国家统计详情":
-        return global_df
     elif indicator == "中国疫情实时统计":
         return china_statistics
-    elif indicator == "国外疫情实时统计":
-        return foreign_statistics
-    elif indicator == "全球疫情实时统计":
-        return global_statistics
     elif indicator == "中国疫情防控医院":
         return hospital_df
+    elif indicator == "全球疫情分国家统计详情":
+        return global_df
+    elif indicator == "全球疫情实时统计":
+        return global_statistics
     elif indicator == "国内新闻":
         return chinese_news
+    elif indicator == "国外疫情实时统计":
+        return foreign_statistics
     else:
         try:
             data_text = str(soup.find("script", attrs={"id": "getAreaStat"}))
@@ -443,8 +440,8 @@ def covid_19_dxy(indicator: str = "浙江省") -> pd.DataFrame:
             )
             if sub_area.empty:
                 return
-            if sub_area.shape[1] != 10:
-                sub_area.columns = [
+            sub_area.columns = (
+                [
                     "区域",
                     "现在确诊人数",
                     "确诊人数",
@@ -457,20 +454,8 @@ def covid_19_dxy(indicator: str = "浙江省") -> pd.DataFrame:
                     "_",
                     "_",
                 ]
-                sub_area = sub_area[
-                    [
-                        "区域",
-                        "现在确诊人数",
-                        "确诊人数",
-                        "疑似人数",
-                        "治愈人数",
-                        "死亡人数",
-                        "高危人数",
-                        "中危人数",
-                    ]
-                ]
-            else:
-                sub_area.columns = [
+                if sub_area.shape[1] != 10
+                else [
                     "区域",
                     "现在确诊人数",
                     "确诊人数",
@@ -482,18 +467,19 @@ def covid_19_dxy(indicator: str = "浙江省") -> pd.DataFrame:
                     "id",
                     "_",
                 ]
-                sub_area = sub_area[
-                    [
-                        "区域",
-                        "现在确诊人数",
-                        "确诊人数",
-                        "疑似人数",
-                        "治愈人数",
-                        "死亡人数",
-                        "高危人数",
-                        "中危人数",
-                    ]
+            )
+            sub_area = sub_area[
+                [
+                    "区域",
+                    "现在确诊人数",
+                    "确诊人数",
+                    "疑似人数",
+                    "治愈人数",
+                    "死亡人数",
+                    "高危人数",
+                    "中危人数",
                 ]
+            ]
             return sub_area
         except IndexError:
             print("请输入省/市的全称, 如: 浙江省/上海市 等")
@@ -519,9 +505,7 @@ def covid_19_baidu(indicator: str = "浙江") -> pd.DataFrame:
         temp_soup[temp_soup.find("{") : temp_soup.rfind("}") + 1]
     )
     big_df = pd.DataFrame()
-    for i, p in enumerate(
-        [item["area"] for item in data_json["component"][0]["caseList"]]
-    ):
+    for i, p in enumerate(item["area"] for item in data_json["component"][0]["caseList"]):
         temp_df = pd.DataFrame(
             jsonpath.jsonpath(
                 data_json["component"][0]["caseList"][i], "$.subList"
@@ -691,20 +675,20 @@ def covid_19_baidu(indicator: str = "浙江") -> pd.DataFrame:
     ]
     foreign_news = temp_df
 
-    if indicator == "中国分省份详情":
-        return domestic_province_df
-    elif indicator == "中国分城市详情":
+    if indicator == "中国分城市详情":
         return domestic_city_df
+    elif indicator == "中国分省份详情":
+        return domestic_province_df
+    elif indicator == "全球分洲国家详情":
+        return global_country_df
+    elif indicator == "全球分洲详情":
+        return global_continent_df
+    elif indicator == "国内新型肺炎最新动态":
+        return domestic_news
     elif indicator == "国外分国详情":
         return outside_country_df
     elif indicator == "国外分城市详情":
         return outside_city_df
-    elif indicator == "全球分洲详情":
-        return global_continent_df
-    elif indicator == "全球分洲国家详情":
-        return global_country_df
-    elif indicator == "国内新型肺炎最新动态":
-        return domestic_news
     elif indicator == "国外新型肺炎最新动态":
         return foreign_news
 
@@ -730,10 +714,7 @@ def migration_area_baidu(
     """
     city_dict.update(province_dict)
     inner_dict = dict(zip(city_dict.values(), city_dict.keys()))
-    if inner_dict[area] in province_dict.keys():
-        dt_flag = "province"
-    else:
-        dt_flag = "city"
+    dt_flag = "province" if inner_dict[area] in province_dict.keys() else "city"
     url = "https://huiyan.baidu.com/migration/cityrank.jsonp"
     params = {
         "dt": dt_flag,
@@ -744,8 +725,7 @@ def migration_area_baidu(
     r = requests.get(url, params=params)
     data_text = r.text[r.text.find("({") + 1 : r.text.rfind(");")]
     data_json = json.loads(data_text)
-    temp_df = pd.DataFrame(data_json["data"]["list"])
-    return temp_df
+    return pd.DataFrame(data_json["data"]["list"])
 
 
 def migration_scale_baidu(
@@ -771,10 +751,7 @@ def migration_scale_baidu(
     """
     city_dict.update(province_dict)
     inner_dict = dict(zip(city_dict.values(), city_dict.keys()))
-    if inner_dict[area] in province_dict.keys():
-        dt_flag = "province"
-    else:
-        dt_flag = "city"
+    dt_flag = "province" if inner_dict[area] in province_dict.keys() else "city"
     url = "https://huiyan.baidu.com/migration/historycurve.jsonp"
     params = {
         "dt": dt_flag,
@@ -802,8 +779,7 @@ def covid_19_trip() -> pd.DataFrame:
     url = "https://r.inews.qq.com/api/travelFront"
     r = requests.get(url)
     data_json = r.json()
-    temp_df = pd.DataFrame(data_json["data"]["list"])
-    return temp_df
+    return pd.DataFrame(data_json["data"]["list"])
 
 
 def covid_19_trace() -> pd.DataFrame:
@@ -821,8 +797,8 @@ def covid_19_trace() -> pd.DataFrame:
     data_json = r.json()
     province_list = [item["fullname"] for item in data_json["result"]["list"]]
     big_df = pd.DataFrame()
+    url = "https://apis.map.qq.com/place_cloud/search/region"
     for province in province_list:
-        url = "https://apis.map.qq.com/place_cloud/search/region"
         params = {
             "region": province,
             "page_size": "200",
@@ -931,8 +907,7 @@ def covid_19_csse_daily(date: str = "2020-04-06") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{date.split('-')[1]}-{date.split('-')[2]}-{date.split('-')[0]}.csv"
-    temp_df = pd.read_table(url, sep=",")
-    return temp_df
+    return pd.read_table(url, sep=",")
 
 
 def covid_19_csse_us_confirmed() -> pd.DataFrame:
@@ -943,8 +918,7 @@ def covid_19_csse_us_confirmed() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv"
-    temp_df = pd.read_table(url, sep=",")
-    return temp_df
+    return pd.read_table(url, sep=",")
 
 
 def covid_19_csse_global_confirmed() -> pd.DataFrame:
@@ -955,8 +929,7 @@ def covid_19_csse_global_confirmed() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
-    temp_df = pd.read_table(url, sep=",")
-    return temp_df
+    return pd.read_table(url, sep=",")
 
 
 def covid_19_csse_us_death() -> pd.DataFrame:
@@ -967,8 +940,7 @@ def covid_19_csse_us_death() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv"
-    temp_df = pd.read_table(url, sep=",")
-    return temp_df
+    return pd.read_table(url, sep=",")
 
 
 def covid_19_csse_global_death() -> pd.DataFrame:
@@ -979,8 +951,7 @@ def covid_19_csse_global_death() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"
-    temp_df = pd.read_table(url, sep=",")
-    return temp_df
+    return pd.read_table(url, sep=",")
 
 
 def covid_19_csse_global_recovered() -> pd.DataFrame:
@@ -991,8 +962,7 @@ def covid_19_csse_global_recovered() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"
-    temp_df = pd.read_table(url, sep=",")
-    return temp_df
+    return pd.read_table(url, sep=",")
 
 
 if __name__ == "__main__":

@@ -73,7 +73,7 @@ def macro_bank_usa_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "美联储利率决议"
     big_df.columns = [
         "日期",
@@ -149,7 +149,7 @@ def macro_bank_euro_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "欧元区利率决议"
     big_df.columns = [
         "日期",
@@ -225,7 +225,7 @@ def macro_bank_newzealand_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "新西兰利率决议报告"
     big_df.columns = [
         "日期",
@@ -301,7 +301,7 @@ def macro_bank_china_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "中国人民银行利率报告"
     big_df.columns = [
         "日期",
@@ -377,7 +377,7 @@ def macro_bank_switzerland_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "瑞士央行利率决议报告"
     big_df.columns = [
         "日期",
@@ -453,7 +453,7 @@ def macro_bank_english_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "英国利率决议报告"
     big_df.columns = [
         "日期",
@@ -529,7 +529,7 @@ def macro_bank_australia_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "澳大利亚利率决议报告"
     big_df.columns = [
         "日期",
@@ -605,7 +605,7 @@ def macro_bank_japan_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "日本利率决议报告"
     big_df.columns = [
         "日期",
@@ -681,7 +681,7 @@ def macro_bank_russia_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "俄罗斯利率决议报告"
     big_df.columns = [
         "日期",
@@ -757,7 +757,7 @@ def macro_bank_india_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "印度利率决议报告"
     big_df.columns = [
         "日期",
@@ -833,7 +833,7 @@ def macro_bank_brazil_interest_rate() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df["商品"] = "巴西利率决议报告"
     big_df.columns = [
         "日期",

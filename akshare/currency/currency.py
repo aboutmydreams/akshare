@@ -102,8 +102,7 @@ def currency_currencies(
     payload = {"type": c_type, "api_key": api_key}
     url = "https://api.currencyscoop.com/v1/currencies"
     r = requests.get(url, params=payload)
-    temp_df = pd.DataFrame.from_dict(r.json()["response"]["fiats"]).T
-    return temp_df
+    return pd.DataFrame.from_dict(r.json()["response"]["fiats"]).T
 
 
 def currency_convert(

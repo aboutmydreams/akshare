@@ -40,8 +40,7 @@ def forbes_rank(symbol: str = "2021福布斯中国创投人100") -> pd.DataFrame
         )
     )
     r = requests.get(name_url_dict[symbol], verify=False)
-    temp_df = pd.read_html(r.text)[0]
-    return temp_df
+    return pd.read_html(r.text)[0]
 
 
 if __name__ == "__main__":

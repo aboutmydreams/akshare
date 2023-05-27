@@ -28,8 +28,7 @@ def _get_real_name_list() -> list:
                 data_text.find("var oHF_1 = ") + 12: data_text.find("var oHF_2") - 2
                 ].replace("\n\t", "")
     data_json = demjson.decode(need_text)
-    name_list = [item[0].strip() for item in data_json.values()]
-    return name_list
+    return [item[0].strip() for item in data_json.values()]
 
 
 def futures_foreign_commodity_subscribe_exchange_symbol() -> list:
@@ -47,8 +46,7 @@ def futures_foreign_commodity_subscribe_exchange_symbol() -> list:
         data_text.find("var oHF_1 = ") + 12: data_text.find("var oHF_2 = ") - 2
         ]
     )
-    code_list = list(data_json.keys())
-    return code_list
+    return list(data_json.keys())
 
 
 def futures_hq_subscribe_exchange_symbol() -> pd.DataFrame:

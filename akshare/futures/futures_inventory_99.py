@@ -210,7 +210,7 @@ def futures_inventory_99(
     }
     name_temp_dict = {}
     code_temp_dict = {}
-    for num in data_code.keys():
+    for num in data_code:
         name_temp_dict[out_exchange_name[num]] = dict(
             zip(data_code[num], data_name[num])
         )

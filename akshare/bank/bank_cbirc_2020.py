@@ -149,12 +149,11 @@ def bank_fjcf_table_detail(
             table_list = [
                 item[0] if isinstance(item, list) else item for item in table_list
             ]
-            table_list.append(str(item))
-            table_list.append(res.json()["data"]["publishDate"])
+            table_list.extend((str(item), res.json()["data"]["publishDate"]))
             table_df = pd.DataFrame(table_list)
             table_df.columns = ["内容"]
             big_df = pd.concat([big_df, table_df.T], ignore_index=True)
-            # 解决有些页面缺少字段的问题, 都放到 try 里面
+                    # 解决有些页面缺少字段的问题, 都放到 try 里面
         except:
             warnings.warn(f"{item} is not table, it will be skip")
             continue

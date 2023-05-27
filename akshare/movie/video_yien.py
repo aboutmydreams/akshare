@@ -27,8 +27,7 @@ def _get_js_path(name: str = "", module_file: str = "") -> str:
     :rtype: str
     """
     module_folder = os.path.abspath(os.path.dirname(os.path.dirname(module_file)))
-    module_json_path = os.path.join(module_folder, "movie", name)
-    return module_json_path
+    return os.path.join(module_folder, "movie", name)
 
 
 def _get_file_content(file_name: str = "jm.js"):
@@ -57,8 +56,7 @@ def decrypt(origin_data: str = "") -> str:
     file_data = _get_file_content(file_name="jm.js")
     ctx = py_mini_racer.MiniRacer()
     ctx.eval(file_data)
-    data = ctx.call("webInstace.shell", origin_data)
-    return data
+    return ctx.call("webInstace.shell", origin_data)
 
 
 def video_tv() -> pd.DataFrame:

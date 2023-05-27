@@ -79,9 +79,7 @@ def match_main_contract(symbol: str = "shfe") -> pd.DataFrame:
         except:
             # print(item, "无主力连续合约")
             continue
-    # print("主力连续合约获取成功")
-    temp_df = pd.DataFrame(subscribe_list)
-    return temp_df
+    return pd.DataFrame(subscribe_list)
 
 
 def futures_display_main_sina() -> pd.DataFrame:

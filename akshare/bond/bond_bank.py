@@ -49,7 +49,7 @@ def get_bond_bank(page_num: int = 1):
         "entityName": "",
         "leadManager": "",
         "regPrdtType": "",
-        "page": int(page_num),
+        "page": page_num,
         "rows": 20,
     }
     r = requests.post(BOND_BANK_URL, data=payload, headers=bond_bank_headers)

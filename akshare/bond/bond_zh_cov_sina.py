@@ -35,10 +35,7 @@ def _get_zh_bond_hs_cov_page_count() -> int:
     }
     r = requests.get(zh_sina_bond_hs_cov_count_url, params=params)
     page_count = int(re.findall(re.compile(r"\d+"), r.text)[0]) / 80
-    if isinstance(page_count, int):
-        return page_count
-    else:
-        return int(page_count) + 1
+    return page_count if isinstance(page_count, int) else int(page_count) + 1
 
 
 def bond_zh_hs_cov_spot() -> pd.DataFrame:
@@ -131,7 +128,7 @@ def _code_id_map() -> dict:
     data_json = r.json()
     temp_df_sz = pd.DataFrame(data_json["data"]["diff"])
     temp_df_sz["sz_id"] = 0
-    code_id_dict.update(dict(zip(temp_df_sz["f12"], temp_df_sz["sz_id"])))
+    code_id_dict |= dict(zip(temp_df_sz["f12"], temp_df_sz["sz_id"]))
     return code_id_dict
 
 
@@ -197,7 +194,6 @@ def bond_zh_hs_cov_min(
         temp_df["成交额"] = pd.to_numeric(temp_df["成交额"])
         temp_df["最新价"] = pd.to_numeric(temp_df["最新价"])
         temp_df["时间"] = pd.to_datetime(temp_df["时间"]).astype(str)  # 带日期时间
-        return temp_df
     else:
         adjust_map = {
             "": "0",
@@ -263,7 +259,8 @@ def bond_zh_hs_cov_min(
                 "换手率",
             ]
         ]
-        return temp_df
+
+    return temp_df
 
 
 def bond_zh_hs_cov_pre_min(symbol: str = "sh113570") -> pd.DataFrame:
@@ -339,7 +336,7 @@ def bond_zh_cov() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -575,45 +572,29 @@ def bond_zh_cov_info(
         "filter": f'(SECURITY_CODE="{symbol}")',
         "_": "1654952140613",
     }
-    if indicator == "基本信息":
-        params.update(
-            {
-                "reportName": indicator_map[indicator],
-                "quoteColumns": "f2~01~CONVERT_STOCK_CODE~CONVERT_STOCK_PRICE,f235~10~SECURITY_CODE~TRANSFER_PRICE,f236~10~SECURITY_CODE~TRANSFER_VALUE,f2~10~SECURITY_CODE~CURRENT_BOND_PRICE,f237~10~SECURITY_CODE~TRANSFER_PREMIUM_RATIO,f239~10~SECURITY_CODE~RESALE_TRIG_PRICE,f240~10~SECURITY_CODE~REDEEM_TRIG_PRICE,f23~01~CONVERT_STOCK_CODE~PBV_RATIO",
-            }
-        )
+    if indicator in {"中签号", "重要日期"}:
+        params |= {
+            "reportName": indicator_map[indicator],
+            "quoteColumns": "",
+        }
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame.from_dict(data_json["result"]["data"])
-    elif indicator == "中签号":
-        params.update(
-            {
-                "reportName": indicator_map[indicator],
-                "quoteColumns": "",
-            }
-        )
+    elif indicator == "基本信息":
+        params |= {
+            "reportName": indicator_map[indicator],
+            "quoteColumns": "f2~01~CONVERT_STOCK_CODE~CONVERT_STOCK_PRICE,f235~10~SECURITY_CODE~TRANSFER_PRICE,f236~10~SECURITY_CODE~TRANSFER_VALUE,f2~10~SECURITY_CODE~CURRENT_BOND_PRICE,f237~10~SECURITY_CODE~TRANSFER_PREMIUM_RATIO,f239~10~SECURITY_CODE~RESALE_TRIG_PRICE,f240~10~SECURITY_CODE~REDEEM_TRIG_PRICE,f23~01~CONVERT_STOCK_CODE~PBV_RATIO",
+        }
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame.from_dict(data_json["result"]["data"])
     elif indicator == "筹资用途":
-        params.update(
-            {
-                "reportName": indicator_map[indicator],
-                "quoteColumns": "",
-                "sortColumns": "SORT",
-                "sortTypes": "1",
-            }
-        )
-        r = requests.get(url, params=params)
-        data_json = r.json()
-        temp_df = pd.DataFrame.from_dict(data_json["result"]["data"])
-    elif indicator == "重要日期":
-        params.update(
-            {
-                "reportName": indicator_map[indicator],
-                "quoteColumns": "",
-            }
-        )
+        params |= {
+            "reportName": indicator_map[indicator],
+            "quoteColumns": "",
+            "sortColumns": "SORT",
+            "sortTypes": "1",
+        }
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame.from_dict(data_json["result"]["data"])

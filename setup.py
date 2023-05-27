@@ -22,7 +22,7 @@ def get_version_string() -> str:
     with open("akshare/__init__.py", "rb") as _f:
         version_line = re.search(
             r"__version__\s+=\s+(.*)", _f.read().decode("utf-8")
-        ).group(1)
+        )[1]
         return str(ast.literal_eval(version_line))
 
 

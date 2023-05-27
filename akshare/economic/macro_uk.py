@@ -74,8 +74,7 @@ def macro_uk_halifax_monthly() -> pd.DataFrame:
     :return: Halifax 房价指数月率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00342256")
-    return temp_df
+    return macro_uk_core(symbol="EMG00342256")
 
 
 # Halifax 房价指数年率
@@ -86,8 +85,7 @@ def macro_uk_halifax_yearly() -> pd.DataFrame:
     :return: Halifax房价指数年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00010370")
-    return temp_df
+    return macro_uk_core(symbol="EMG00010370")
 
 
 # 贸易帐
@@ -98,8 +96,7 @@ def macro_uk_trade() -> pd.DataFrame:
     :return: 贸易帐
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00158309")
-    return temp_df
+    return macro_uk_core(symbol="EMG00158309")
 
 
 # 央行公布利率决议
@@ -110,8 +107,7 @@ def macro_uk_bank_rate() -> pd.DataFrame:
     :return: 央行公布利率决议
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00342253")
-    return temp_df
+    return macro_uk_core(symbol="EMG00342253")
 
 
 # 核心消费者物价指数年率
@@ -122,8 +118,7 @@ def macro_uk_core_cpi_yearly() -> pd.DataFrame:
     :return: 核心消费者物价指数年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00010279")
-    return temp_df
+    return macro_uk_core(symbol="EMG00010279")
 
 
 # 核心消费者物价指数月率
@@ -134,8 +129,7 @@ def macro_uk_core_cpi_monthly() -> pd.DataFrame:
     :return: 核心消费者物价指数月率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00010291")
-    return temp_df
+    return macro_uk_core(symbol="EMG00010291")
 
 
 # 消费者物价指数年率
@@ -146,8 +140,7 @@ def macro_uk_cpi_yearly() -> pd.DataFrame:
     :return: 消费者物价指数年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00010267")
-    return temp_df
+    return macro_uk_core(symbol="EMG00010267")
 
 
 # 消费者物价指数月率
@@ -158,8 +151,7 @@ def macro_uk_cpi_monthly() -> pd.DataFrame:
     :return: 消费者物价指数月率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00010291")
-    return temp_df
+    return macro_uk_core(symbol="EMG00010291")
 
 
 # 零售销售月率
@@ -170,8 +162,7 @@ def macro_uk_retail_monthly() -> pd.DataFrame:
     :return: 零售销售月率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00158298")
-    return temp_df
+    return macro_uk_core(symbol="EMG00158298")
 
 
 # 零售销售年率
@@ -182,8 +173,7 @@ def macro_uk_retail_yearly() -> pd.DataFrame:
     :return: 零售销售年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00158297")
-    return temp_df
+    return macro_uk_core(symbol="EMG00158297")
 
 
 # Rightmove 房价指数年率
@@ -194,8 +184,7 @@ def macro_uk_rightmove_yearly() -> pd.DataFrame:
     :return: Rightmove 房价指数年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00341608")
-    return temp_df
+    return macro_uk_core(symbol="EMG00341608")
 
 
 # Rightmove 房价指数月率
@@ -206,8 +195,7 @@ def macro_uk_rightmove_monthly() -> pd.DataFrame:
     :return: Rightmove 房价指数月率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00341607")
-    return temp_df
+    return macro_uk_core(symbol="EMG00341607")
 
 
 # GDP 季率初值
@@ -218,8 +206,7 @@ def macro_uk_gdp_quarterly() -> pd.DataFrame:
     :return: GDP 季率初值
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00158277")
-    return temp_df
+    return macro_uk_core(symbol="EMG00158277")
 
 
 # GDP 年率初值
@@ -230,8 +217,7 @@ def macro_uk_gdp_yearly() -> pd.DataFrame:
     :return: GDP 年率初值
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00158276")
-    return temp_df
+    return macro_uk_core(symbol="EMG00158276")
 
 
 # 失业率
@@ -242,8 +228,7 @@ def macro_uk_unemployment_rate() -> pd.DataFrame:
     :return: 失业率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_uk_core(symbol="EMG00010348")
-    return temp_df
+    return macro_uk_core(symbol="EMG00010348")
 
 
 if __name__ == "__main__":

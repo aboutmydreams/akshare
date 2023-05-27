@@ -21,8 +21,7 @@ def get_ths_js(file: str = "ths.js") -> pathlib.Path:
     .. [1] E.A.Abbott, ”Flatland”, Seeley & Co., 1884.
     """
     with resources.path("akshare.data", file) as f:
-        data_file_path = f
-        return data_file_path
+        return f
 
 
 def get_crypto_info_csv(file: str = "crypto_info.zip") -> pathlib.Path:
@@ -38,8 +37,7 @@ def get_crypto_info_csv(file: str = "crypto_info.zip") -> pathlib.Path:
     .. [1] E.A.Abbott, ”Flatland”, Seeley & Co., 1884.
     """
     with resources.path("akshare.data", file) as f:
-        data_file_path = f
-        return data_file_path
+        return f
 
 
 def get_covid_js(file: str = "covid.js") -> pathlib.Path:
@@ -56,8 +54,7 @@ def get_covid_js(file: str = "covid.js") -> pathlib.Path:
     """
 
     with resources.path("akshare.data", file) as f:
-        data_file_path = f
-        return data_file_path
+        return f
 
 
 if __name__ == "__main__":

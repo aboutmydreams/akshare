@@ -34,8 +34,7 @@ def bond_repo_zh_tick(
     }
     r = requests.get(url, params=params)
     r.encoding = "gbk"
-    temp_df = pd.read_table(StringIO(r.text))
-    return temp_df
+    return pd.read_table(StringIO(r.text))
 
 
 if __name__ == "__main__":

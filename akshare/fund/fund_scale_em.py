@@ -33,7 +33,7 @@ def fund_scale_change_em() -> pd.DataFrame:
     total_page = data_json["pages"]
     big_df = pd.DataFrame()
     for page in range(1, int(total_page) + 1):
-        params.update({"pi": page})
+        params["pi"] = page
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -1])
@@ -81,7 +81,7 @@ def fund_hold_structure_em() -> pd.DataFrame:
     total_page = data_json["pages"]
     big_df = pd.DataFrame()
     for page in range(1, int(total_page) + 1):
-        params.update({"pi": page})
+        params["pi"] = page
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -1])

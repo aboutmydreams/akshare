@@ -74,8 +74,7 @@ def macro_japan_bank_rate() -> pd.DataFrame:
     :return: 央行公布利率决议
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_japan_core(symbol="EMG00342252")
-    return temp_df
+    return macro_japan_core(symbol="EMG00342252")
 
 
 # 全国消费者物价指数年率
@@ -86,8 +85,7 @@ def macro_japan_cpi_yearly() -> pd.DataFrame:
     :return: 全国消费者物价指数年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_japan_core(symbol="EMG00005004")
-    return temp_df
+    return macro_japan_core(symbol="EMG00005004")
 
 
 # 全国核心消费者物价指数年率
@@ -98,8 +96,7 @@ def macro_japan_core_cpi_yearly() -> pd.DataFrame:
     :return: 全国核心消费者物价指数年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_japan_core(symbol="EMG00158099")
-    return temp_df
+    return macro_japan_core(symbol="EMG00158099")
 
 
 # 失业率
@@ -110,8 +107,7 @@ def macro_japan_unemployment_rate() -> pd.DataFrame:
     :return: 失业率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_japan_core(symbol="EMG00005047")
-    return temp_df
+    return macro_japan_core(symbol="EMG00005047")
 
 
 # 领先指标终值
@@ -122,8 +118,7 @@ def macro_japan_head_indicator() -> pd.DataFrame:
     :return: 领先指标终值
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_japan_core(symbol="EMG00005117")
-    return temp_df
+    return macro_japan_core(symbol="EMG00005117")
 
 
 if __name__ == "__main__":

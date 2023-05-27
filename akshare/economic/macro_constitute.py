@@ -51,7 +51,7 @@ def macro_cons_gold() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df.columns = [
         "日期",
         "总库存",
@@ -115,7 +115,7 @@ def macro_cons_silver() -> pd.DataFrame:
             .date()
             .isoformat()
         )
-        params.update({"max_date": f"{last_date_str}"})
+        params["max_date"] = f"{last_date_str}"
     big_df.columns = [
         "日期",
         "总库存",
@@ -169,15 +169,15 @@ def macro_cons_opec_month() -> pd.DataFrame:
         "x-version": "1.0.0",
     }
     res = requests.get(
-        f"https://datacenter-api.jin10.com/reports/dates?category=opec&_={str(int(round(t * 1000)))}",
+        f"https://datacenter-api.jin10.com/reports/dates?category=opec&_={int(round(t * 1000))}",
         headers=headers,
-    )  # 日期序列
+    )
     all_date_list = res.json()["data"]
     bar = tqdm(reversed(all_date_list))
     for item in bar:
         bar.set_description(f"Please wait for a moment, now downloading {item}'s data")
         res = requests.get(
-            f"https://datacenter-api.jin10.com/reports/list?category=opec&date={item}&_={str(int(round(t * 1000)))}",
+            f"https://datacenter-api.jin10.com/reports/list?category=opec&date={item}&_={int(round(t * 1000))}",
             headers=headers,
         )
         temp_df = pd.DataFrame(

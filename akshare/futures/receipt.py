@@ -76,7 +76,7 @@ def get_shfe_receipt_1(date: str = None, vars_list: List = cons.contract_symbols
     :rtype: pandas.DataFrame
     """
     if not isinstance(vars_list, list):
-        return warnings.warn(f"symbol_list: 必须是列表")
+        return warnings.warn("symbol_list: 必须是列表")
     date = cons.convert_date(date).strftime('%Y%m%d') if date is not None else datetime.date.today()
     if date not in calendar:
         warnings.warn(f"{date.strftime('%Y%m%d')}非交易日")
@@ -102,8 +102,7 @@ def get_shfe_receipt_1(date: str = None, vars_list: List = cons.contract_symbols
             else:
                 data_cut = data.loc[indexes[i]:last_index, :]
                 data_cut = data_cut.fillna(method='pad')
-            data_dict = dict()
-            data_dict['var'] = chinese_to_english(data_cut[0].tolist()[0])
+            data_dict = {'var': chinese_to_english(data_cut[0].tolist()[0])}
             data_dict['receipt'] = int(data_cut[2].tolist()[-1])
             data_dict['receipt_chg'] = int(data_cut[3].tolist()[-1])
             data_dict['date'] = date
@@ -127,10 +126,10 @@ def get_shfe_receipt_2(date: str = None, vars_list: List = cons.contract_symbols
     :rtype: pandas.DataFrame
     """
     if not isinstance(vars_list, list):
-        return warnings.warn(f"symbol_list: 必须是列表")
+        return warnings.warn("symbol_list: 必须是列表")
     date = cons.convert_date(date).strftime('%Y%m%d') if date is not None else datetime.date.today()
     if date not in calendar:
-        warnings.warn('%s非交易日' % date.strftime('%Y%m%d'))
+        warnings.warn(f"{date.strftime('%Y%m%d')}非交易日")
         return None
     url = cons.SHFE_RECEIPT_URL_2 % date
     r = requests_link(url, encoding='utf-8', headers=cons.shfe_headers)
@@ -178,7 +177,7 @@ def get_czce_receipt_1(date: str = None, vars_list: List = cons.contract_symbols
     """
     date = cons.convert_date(date).strftime('%Y%m%d') if date is not None else datetime.date.today()
     if date not in calendar:
-        warnings.warn('%s非交易日' % date.strftime('%Y%m%d'))
+        warnings.warn(f"{date.strftime('%Y%m%d')}非交易日")
         return None
     if date == '20090820':
         return pd.DataFrame()
@@ -192,10 +191,9 @@ def get_czce_receipt_1(date: str = None, vars_list: List = cons.contract_symbols
     for i in list(range(len(indexes))):
         if i != len(indexes) - 1:
             data_cut = data.loc[indexes[i]:ends[i], :]
-            data_cut = data_cut.fillna(method='pad')
         else:
             data_cut = data.loc[indexes[i]:, :]
-            data_cut = data_cut.fillna(method='pad')
+        data_cut = data_cut.fillna(method='pad')
         if 'PTA' in data_cut[0].tolist()[0]:
             var = 'TA'
         else:
@@ -228,10 +226,10 @@ def get_czce_receipt_2(date: str = None, vars_list: List = cons.contract_symbols
     :rtype: pandas.DataFrame
     """
     if not isinstance(vars_list, list):
-        return warnings.warn(f"symbol_list: 必须是列表")
+        return warnings.warn("symbol_list: 必须是列表")
     date = cons.convert_date(date).strftime('%Y%m%d') if date is not None else datetime.date.today()
     if date not in calendar:
-        warnings.warn('%s非交易日' % date.strftime('%Y%m%d'))
+        warnings.warn(f"{date.strftime('%Y%m%d')}非交易日")
         return None
     url = cons.CZCE_RECEIPT_URL_2 % (date[:4], date)
     r = requests.get(url)
@@ -240,8 +238,11 @@ def get_czce_receipt_2(date: str = None, vars_list: List = cons.contract_symbols
     records = pd.DataFrame()
     for data_cut in data:
         if len(data_cut.columns) > 3:
-            last_indexes = [x for x in data_cut.index if '注：' in str(data_cut[0].tolist()[x])]
-            if len(last_indexes) > 0:
+            if last_indexes := [
+                x
+                for x in data_cut.index
+                if '注：' in str(data_cut[0].tolist()[x])
+            ]:
                 last_index = last_indexes[0] - 1
                 data_cut = data_cut.loc[:last_index, :]
             if 'PTA' in data_cut[0].tolist()[0]:
@@ -278,7 +279,7 @@ def get_czce_receipt_3(date: str = None, vars_list: List = cons.contract_symbols
         return warnings.warn("vars_list: 必须是列表")
     date = cons.convert_date(date).strftime('%Y%m%d') if date is not None else datetime.date.today()
     if date not in calendar:
-        warnings.warn('%s非交易日' % date.strftime('%Y%m%d'))
+        warnings.warn(f"{date.strftime('%Y%m%d')}非交易日")
         return None
     url = f"http://www.czce.com.cn/cn/DFSStaticFiles/Future/{date[:4]}/{date}/FutureDataWhsheet.xls"
     r = requests_link(url, encoding='utf-8', headers=cons.shfe_headers)
@@ -302,12 +303,7 @@ def get_czce_receipt_3(date: str = None, vars_list: List = cons.contract_symbols
         inner_df.columns = inner_df.iloc[1, :]
         inner_df = inner_df.iloc[2:, :]
         inner_df = inner_df.dropna(axis=1, how='all')
-        if symbol == "PTA":
-            try:
-                receipt_list.append(inner_df['仓单数量(完税)'].iloc[-1] + inner_df['仓单数量(保税)'].iloc[-1])  # 20210316 TA 分为保税和完税
-            except:
-                receipt_list.append(0)
-        elif symbol == "MA":
+        if symbol == "MA":
             try:
                 try:
                     receipt_list.append(inner_df['仓单数量(完税)'].iloc[-2] + inner_df['仓单数量(保税)'].iloc[-2])  # 20210316 MA 分为保税和完税
@@ -315,14 +311,18 @@ def get_czce_receipt_3(date: str = None, vars_list: List = cons.contract_symbols
                     receipt_list.append(inner_df['仓单数量(完税)'].iloc[-2])  # 处理 MA 的特殊格式
             except:
                 receipt_list.append(0)
+            receipt_chg_list.append(inner_df['当日增减'].iloc[-2])
+        elif symbol == "PTA":
+            try:
+                receipt_list.append(inner_df['仓单数量(完税)'].iloc[-1] + inner_df['仓单数量(保税)'].iloc[-1])  # 20210316 TA 分为保税和完税
+            except:
+                receipt_list.append(0)
+            receipt_chg_list.append(inner_df['当日增减'].iloc[-1])
         else:
             try:
                 receipt_list.append(inner_df['仓单数量'].iloc[-1])
             except:
                 receipt_list.append(0)
-        if symbol == "MA":
-            receipt_chg_list.append(inner_df['当日增减'].iloc[-2])
-        else:
             receipt_chg_list.append(inner_df['当日增减'].iloc[-1])
     data_df = pd.DataFrame([symbol_list, receipt_list, receipt_chg_list, [date]*len(receipt_chg_list)]).T
     data_df.columns = ['var', 'receipt', 'receipt_chg', 'date']
@@ -348,7 +348,7 @@ def get_receipt(start_day: str = None, end_day: str = None, vars_list: List = co
     :rtype: pandas.DataFrame
     """
     if not isinstance(vars_list, list):
-        return warnings.warn(f"vars_list: 必须是列表")
+        return warnings.warn("vars_list: 必须是列表")
     start_day = cons.convert_date(start_day) if start_day is not None else datetime.date.today()
     end_day = cons.convert_date(end_day) if end_day is not None else cons.convert_date(
         cons.get_latest_data_date(datetime.datetime.now()))
@@ -359,7 +359,17 @@ def get_receipt(start_day: str = None, end_day: str = None, vars_list: List = co
         else:
             print(start_day)
             for market, market_vars in cons.market_exchange_symbols.items():
-                if market == 'dce':
+                if market == 'czce':
+                    if datetime.date(2008, 3, 3) <= start_day <= datetime.date(2010, 8, 24):
+                        f = get_czce_receipt_1
+                    elif datetime.date(2010, 8, 24) < start_day <= datetime.date(2015, 11, 11):
+                        f = get_czce_receipt_2
+                    elif start_day > datetime.date(2015, 11, 11):
+                        f = get_czce_receipt_3
+                    else:
+                        f = None
+                        print('20080303 起，郑州商品交易所每个交易日更新仓单数据')
+                elif market == 'dce':
                     if start_day >= datetime.date(2009, 4, 7):
                         f = get_dce_receipt
                     else:
@@ -373,16 +383,6 @@ def get_receipt(start_day: str = None, end_day: str = None, vars_list: List = co
                     else:
                         f = None
                         print('20081006 起，上海期货交易所每个交易日更新仓单数据')
-                elif market == 'czce':
-                    if datetime.date(2008, 3, 3) <= start_day <= datetime.date(2010, 8, 24):
-                        f = get_czce_receipt_1
-                    elif datetime.date(2010, 8, 24) < start_day <= datetime.date(2015, 11, 11):
-                        f = get_czce_receipt_2
-                    elif start_day > datetime.date(2015, 11, 11):
-                        f = get_czce_receipt_3
-                    else:
-                        f = None
-                        print('20080303 起，郑州商品交易所每个交易日更新仓单数据')
                 get_vars = [var for var in vars_list if var in market_vars]
                 if market != 'cffex' and get_vars != []:
                     if f is not None:

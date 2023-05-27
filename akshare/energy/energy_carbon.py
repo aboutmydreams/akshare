@@ -225,24 +225,21 @@ def energy_carbon_hb() -> pd.DataFrame:
         for item in soup.find("ul", attrs={"class": "title"}).find_all("li")
     ]
     big_df = pd.DataFrame()
+    url = "http://www.hbets.cn/list/13.html"
     for page in tqdm(
         range(1, page_num + 1), desc="Please wait for a moment", leave=False
     ):
-        url = f"http://www.hbets.cn/list/13.html"
         params = {"page": page}
         r = requests.get(url, params=params)
         soup = BeautifulSoup(r.text, "lxml")
-        page_node = [
-            item
-            for item in soup.find(attrs={"class": "future_table"}).find_all(
+        page_node = list(
+            soup.find(attrs={"class": "future_table"}).find_all(
                 attrs={"class": "cont"}
             )
-        ]
+        )
         temp_list = []
         for item in page_node:
-            temp_inner_list = []
-            for inner_item in item.find_all("li"):
-                temp_inner_list.append(inner_item.text)
+            temp_inner_list = [inner_item.text for inner_item in item.find_all("li")]
             temp_list.append(temp_inner_list)
         temp_df = pd.DataFrame(temp_list)
         big_df = pd.concat([big_df, temp_df], ignore_index=True)
