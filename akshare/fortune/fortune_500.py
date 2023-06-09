@@ -30,8 +30,7 @@ def _fortune_rank_year_url_map() -> dict:
     node_list = soup.find_all('div', attrs={"class": "swiper-slide"})
     url_list = [item.find("a")['href'] for item in node_list]
     year_list = [item.find("a").text for item in node_list]
-    year_url_map = dict(zip(year_list, url_list))
-    return year_url_map
+    return dict(zip(year_list, url_list))
 
 
 def fortune_rank(year: str = "2015") -> pd.DataFrame:
@@ -48,7 +47,6 @@ def fortune_rank(year: str = "2015") -> pd.DataFrame:
     if int(year) < 2007:
         df = pd.read_html(r.text)[0].iloc[1:-1, ]
         df.columns = pd.read_html(r.text)[0].iloc[0, :].tolist()
-        return df
     elif 2006 < int(year) < 2010:
         df = pd.read_html(r.text)[0].iloc[1:, ]
         df.columns = pd.read_html(r.text)[0].iloc[0, :].tolist()
@@ -59,10 +57,10 @@ def fortune_rank(year: str = "2015") -> pd.DataFrame:
             temp_df = pd.read_html(r.text)[0].iloc[1:, ]
             temp_df.columns = pd.read_html(r.text)[0].iloc[0, :].tolist()
             df = pd.concat([df, temp_df], ignore_index=True)
-        return df
     else:
         df = pd.read_html(r.text)[0]
-        return df
+
+    return df
 
 
 def fortune_rank_eng(year: str = "1995") -> pd.DataFrame:
@@ -79,7 +77,7 @@ def fortune_rank_eng(year: str = "1995") -> pd.DataFrame:
     res = requests.get(url)
     soup = BeautifulSoup(res.text, "lxml")
     code = json.loads(soup.find("script", attrs={"type": "application/ld+json"}).string)["identifier"]
-    url = f"https://content.fortune.com/wp-json/irving/v1/data/franchise-search-results"
+    url = "https://content.fortune.com/wp-json/irving/v1/data/franchise-search-results"
     params = {
         "list_id": code,
         "token": "Zm9ydHVuZTpCcHNyZmtNZCN5SndjWkkhNHFqMndEOTM=",

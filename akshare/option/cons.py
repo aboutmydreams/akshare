@@ -58,8 +58,7 @@ def convert_date(date):
     if isinstance(date, datetime.date):
         return date
     elif isinstance(date, str):
-        match = DATE_PATTERN.match(date)
-        if match:
+        if match := DATE_PATTERN.match(date):
             groups = match.groups()
             if len(groups) == 3:
                 return datetime.date(
@@ -78,8 +77,7 @@ def get_json_path(name, module_file):
     :return: str json_file_path
     """
     module_folder = os.path.abspath(os.path.dirname(os.path.dirname(module_file)))
-    module_json_path = os.path.join(module_folder, "file_fold", name)
-    return module_json_path
+    return os.path.join(module_folder, "file_fold", name)
 
 
 def get_calendar():
@@ -102,21 +100,18 @@ def last_trading_day(day):
 
     if isinstance(day, str):
         if day not in calendar:
-            print("Today is not trading day：" + day)
+            print(f"Today is not trading day：{day}")
             return False
         pos = calendar.index(day)
-        last_day = calendar[pos - 1]
-        return last_day
-
+        return calendar[pos - 1]
     elif isinstance(day, datetime.date):
         d_str = day.strftime("%Y%m%d")
         if d_str not in calendar:
-            print("Today is not working day：" + d_str)
+            print(f"Today is not working day：{d_str}")
             return False
         pos = calendar.index(d_str)
         last_day = calendar[pos - 1]
-        last_day = datetime.datetime.strptime(last_day, "%Y%m%d").date()
-        return last_day
+        return datetime.datetime.strptime(last_day, "%Y%m%d").date()
 
 
 def get_latest_data_date(day):
@@ -127,14 +122,14 @@ def get_latest_data_date(day):
     """
     calendar = get_calendar()
     if day.strftime("%Y%m%d") in calendar:
-        if day.time() > datetime.time(17, 0, 0):
-            return day.strftime("%Y%m%d")
-        else:
-            return last_trading_day(day.strftime("%Y%m%d"))
-    else:
-        while day.strftime("%Y%m%d") not in calendar:
-            day = day - datetime.timedelta(days=1)
-        return day.strftime("%Y%m%d")
+        return (
+            day.strftime("%Y%m%d")
+            if day.time() > datetime.time(17, 0, 0)
+            else last_trading_day(day.strftime("%Y%m%d"))
+        )
+    while day.strftime("%Y%m%d") not in calendar:
+        day = day - datetime.timedelta(days=1)
+    return day.strftime("%Y%m%d")
 
 
 if __name__ == "__main__":

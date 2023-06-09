@@ -18,8 +18,7 @@ def fred_md(date: str = "2020-01") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://s3.amazonaws.com/files.fred.stlouisfed.org/fred-md/monthly/{date}.csv"
-    temp_df = pd.read_csv(url)
-    return temp_df
+    return pd.read_csv(url)
 
 
 def fred_qd(date: str = "2020-01") -> pd.DataFrame:
@@ -31,8 +30,7 @@ def fred_qd(date: str = "2020-01") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://s3.amazonaws.com/files.fred.stlouisfed.org/fred-md/quarterly/{date}.csv"
-    temp_df = pd.read_csv(url)
-    return temp_df
+    return pd.read_csv(url)
 
 
 if __name__ == "__main__":

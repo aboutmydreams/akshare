@@ -29,7 +29,7 @@ def _currency_boc_sina_map(date: str = "20210614") -> dict:
     r = requests.get(url, params=params)
     r.encoding = "gbk"
     soup = BeautifulSoup(r.text, "lxml")
-    data_dict = dict(
+    return dict(
         zip(
             [
                 item.text
@@ -45,7 +45,6 @@ def _currency_boc_sina_map(date: str = "20210614") -> dict:
             ],
         )
     )
-    return data_dict
 
 
 def currency_boc_sina(
@@ -77,7 +76,7 @@ def currency_boc_sina(
     page_num = int(soup.find_all("a", attrs={"class": "page"})[-2].text)
     big_df = pd.DataFrame()
     for page in tqdm(range(1, page_num + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         temp_df = pd.read_html(r.text, header=0)[0]
         big_df = pd.concat([big_df, temp_df], ignore_index=True)

@@ -166,7 +166,7 @@ def index_realtime_sw(symbol: str = "二级行业") -> pd.DataFrame:
     total_page = math.ceil(total_num / 50)
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["results"])
@@ -238,7 +238,7 @@ def index_analysis_daily_sw(
     total_page = math.ceil(total_num / 50)
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["results"])
@@ -330,7 +330,7 @@ def index_analysis_weekly_sw(
     total_page = math.ceil(total_num / 50)
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["results"])
@@ -400,7 +400,7 @@ def index_analysis_monthly_sw(
     total_page = math.ceil(total_num / 50)
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["results"])

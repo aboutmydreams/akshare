@@ -72,11 +72,11 @@ def car_gasgoo_sale_rank(symbol: str = "车企榜", date: str = "202109"):
         "startM": str(int(date[4:6])),
         "endY": date[:4],
         "endM": str(int(date[4:6])),
-        "orderBy": f"{date[:4]}-{str(int(date[4:6]))}",
+        "orderBy": f"{date[:4]}-{int(date[4:6])}",
         "modelGradeID": "",
         "modelTypeID": "",
         "countryID": "",
-        "queryDate": f"{date[:4]}-{str(int(date[4:6]))}",
+        "queryDate": f"{date[:4]}-{int(date[4:6])}",
     }
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -103,8 +103,7 @@ def car_gasgoo_sale_rank(symbol: str = "车企榜", date: str = "202109"):
     r = requests.post(url, json=payload, headers=headers)
     data_json = r.json()
     data_json = demjson.decode(data_json['d'])
-    temp_df = pd.DataFrame(data_json)
-    return temp_df
+    return pd.DataFrame(data_json)
 
 
 if __name__ == '__main__':

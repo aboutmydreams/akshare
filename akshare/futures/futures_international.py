@@ -30,7 +30,7 @@ def get_sector_symbol_name_url() -> dict:
     url_list = [item.find("a")["href"] for item in name_url_option_list]
     name_list = [item.get_text() for item in name_url_option_list]
     name_code_map_dict = {}
-    name_code_map_dict.update(zip(name_list, url_list))
+    name_code_map_dict |= zip(name_list, url_list)
     return name_code_map_dict
 
 
@@ -65,7 +65,7 @@ def futures_global_commodity_name_url_map(sector: str = "能源") -> dict:
         for item in soup.find_all(attrs={"class": "plusIconTd"})
     ]
     name_code_map_dict = {}
-    name_code_map_dict.update(zip(name_list, url_list))
+    name_code_map_dict |= zip(name_list, url_list)
     return name_code_map_dict
 
 

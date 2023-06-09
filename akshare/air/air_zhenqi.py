@@ -31,8 +31,7 @@ def _get_js_path(name: str = None, module_file: str = None) -> str:
     module_folder = os.path.abspath(
         os.path.dirname(os.path.dirname(module_file))
     )
-    module_json_path = os.path.join(module_folder, "air", name)
-    return module_json_path
+    return os.path.join(module_folder, "air", name)
 
 
 def _get_file_content(file_name: str = "crypto.js") -> str:
@@ -68,7 +67,6 @@ def air_city_table() -> pd.DataFrame:
     :return: 城市映射
     :rtype: pandas.DataFrame
     """
-    url = "https://www.zq12369.com/environment.php"
     date = "2020-05-01"
     if len(date.split("-")) == 3:
         params = {
@@ -77,6 +75,7 @@ def air_city_table() -> pd.DataFrame:
             "order": "DESC",
             "type": "DAY",
         }
+        url = "https://www.zq12369.com/environment.php"
         r = requests.get(url, params=params)
         temp_df = pd.read_html(r.text)[1].iloc[1:, :]
         del temp_df["降序"]
@@ -131,8 +130,7 @@ def air_quality_watch_point(
     r = requests.post(url, data=payload, headers=headers)
     data_text = r.text
     data_json = demjson.decode(ctx.call("decode_result", data_text))
-    temp_df = pd.DataFrame(data_json["rows"])
-    return temp_df
+    return pd.DataFrame(data_json["rows"])
 
 
 def air_quality_hist(
@@ -246,7 +244,7 @@ def air_quality_rank(date: str = "") -> pd.DataFrame:
         date = date
     elif len(date) == 6:
         date = "-".join([date[:4], date[4:6]])
-    elif date == "":
+    elif not date:
         date = "实时"
     else:
         date = "-".join([date[:4], date[4:6], date[6:]])

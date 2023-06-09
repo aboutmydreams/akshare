@@ -26,7 +26,7 @@ def _currency_name_url() -> dict:
     res = requests.post(url, headers=short_headers)
     data_table = pd.read_html(res.text)[0].iloc[:, 1:]  # 实时货币行情
     data_table.columns = ["中文名称", "英文名称", "最新", "最高", "最低", "涨跌额", "涨跌幅", "时间"]
-    name_code_dict = dict(
+    return dict(
         zip(
             data_table["中文名称"].tolist(),
             [
@@ -35,7 +35,6 @@ def _currency_name_url() -> dict:
             ],
         )
     )
-    return name_code_dict
 
 
 def currency_hist_area_index_name_code(symbol: str = "usd-jpy") -> dict:
@@ -53,10 +52,9 @@ def currency_hist_area_index_name_code(symbol: str = "usd-jpy") -> dict:
     soup = BeautifulSoup(r.text, "lxml")
     data_text = soup.find("script", attrs={"id": "__NEXT_DATA__"}).text
     data_json = json.loads(data_text)
-    code = json.loads(data_json["props"]["pageProps"]["state"])["dataStore"][
+    return json.loads(data_json["props"]["pageProps"]["state"])["dataStore"][
         "pageInfoStore"
     ]["identifiers"]["instrument_id"]
-    return code
 
 
 def currency_hist(
@@ -251,7 +249,7 @@ def currency_name_code(symbol: str = "usd/jpy") -> pd.DataFrame:
             ],
         )
     )
-    name_code_dict_one.update(name_code_dict_two)
+    name_code_dict_one |= name_code_dict_two
     temp_df = pd.DataFrame.from_dict(
         name_code_dict_one, orient="index"
     ).reset_index()

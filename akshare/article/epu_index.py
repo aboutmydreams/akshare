@@ -23,32 +23,35 @@ def article_epu_index(index: str = "China") -> pd.DataFrame:
         index = "US"
     if index == "Hong Kong":
         index = "HK"
-        epu_df = pd.read_excel(
+        return pd.read_excel(
             f"http://www.policyuncertainty.com/media/{index}_EPU_Data_Annotated.xlsx",
-            engine="openpyxl"
+            engine="openpyxl",
         )
-        return epu_df
-    if index in ["Germany", "France", "Italy"]:  # 欧洲
+    if index in {"Germany", "France", "Italy"}:  # 欧洲
         index = "Europe"
     if index == "South Korea":
         index = "Korea"
     if index == "Spain New":
         index = "Spain"
-    if index in ["Ireland", "Chile", "Colombia", "Netherlands", "Singapore", "Sweden"]:
-        epu_df = pd.read_excel(
+    if index in {
+        "Ireland",
+        "Chile",
+        "Colombia",
+        "Netherlands",
+        "Singapore",
+        "Sweden",
+    }:
+        return pd.read_excel(
             f"http://www.policyuncertainty.com/media/{index}_Policy_Uncertainty_Data.xlsx",
-            engine="openpyxl"
+            engine="openpyxl",
         )
-        return epu_df
     if index == "Greece":
-        epu_df = pd.read_excel(
+        return pd.read_excel(
             f"http://www.policyuncertainty.com/media/FKT_{index}_Policy_Uncertainty_Data.xlsx",
-            engine="openpyxl"
+            engine="openpyxl",
         )
-        return epu_df
     url = f"http://www.policyuncertainty.com/media/{index}_Policy_Uncertainty_Data.csv"
-    epu_df = pd.read_csv(url)
-    return epu_df
+    return pd.read_csv(url)
 
 
 if __name__ == "__main__":

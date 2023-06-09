@@ -437,7 +437,7 @@ def option_sse_expire_day_sina(
         url = "http://stock.finance.sina.com.cn/futures/api/openapi.php/StockOptionService.getRemainderDay"
         params = {
             "exchange": f"{exchange}",
-            "cate": f"{'XD' + symbol}",
+            "cate": f"{f'XD{symbol}'}",
             "date": f"{trade_date[:4]}-{trade_date[4:]}",
         }
         r = requests.get(url, params=params)
@@ -464,20 +464,10 @@ def option_sse_codes_sina(
     :rtype: Tuple[List, List]
     """
     if symbol == "看涨期权":
-        url = "".join(
-            [
-                "http://hq.sinajs.cn/list=OP_UP_",
-                underlying,
-                str(trade_date)[-4:],
-            ]
-        )
+        url = "".join(["http://hq.sinajs.cn/list=OP_UP_", underlying, trade_date[-4:]])
     else:
         url = "".join(
-            [
-                "http://hq.sinajs.cn/list=OP_DOWN_",
-                underlying,
-                str(trade_date)[-4:],
-            ]
+            ["http://hq.sinajs.cn/list=OP_DOWN_", underlying, trade_date[-4:]]
         )
     headers = {
         "Accept": "*/*",
@@ -586,10 +576,7 @@ def option_sse_spot_price_sina(symbol: str = "10003720") -> pd.DataFrame:
         "成交量",
         "成交额",
     ]
-    data_df = pd.DataFrame(
-        list(zip(field_list, data_list)), columns=["字段", "值"]
-    )
-    return data_df
+    return pd.DataFrame(list(zip(field_list, data_list)), columns=["字段", "值"])
 
 
 def option_sse_underlying_spot_price_sina(
@@ -654,10 +641,7 @@ def option_sse_underlying_spot_price_sina(
         "行情时间",
         "停牌状态",
     ]
-    data_df = pd.DataFrame(
-        list(zip(field_list, data_list)), columns=["字段", "值"]
-    )
-    return data_df
+    return pd.DataFrame(list(zip(field_list, data_list)), columns=["字段", "值"])
 
 
 def option_sse_greeks_sina(symbol: str = "10003045") -> pd.DataFrame:
@@ -700,11 +684,10 @@ def option_sse_greeks_sina(symbol: str = "10003045") -> pd.DataFrame:
         "最新价",
         "理论价值",
     ]
-    data_df = pd.DataFrame(
+    return pd.DataFrame(
         list(zip(field_list, [data_list[0]] + data_list[4:])),
         columns=["字段", "值"],
     )
-    return data_df
 
 
 def option_sse_minute_sina(symbol: str = "10003720") -> pd.DataFrame:

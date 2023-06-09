@@ -195,7 +195,7 @@ def match_main_contract(symbol: str = "cffex") -> str:
                 print(item, "无主力合约")
             continue
     print(f"{symbol}主力合约获取成功")
-    return ",".join([item for item in subscribe_exchange_list])
+    return ",".join(list(subscribe_exchange_list))
 
 
 def futures_zh_spot(
@@ -328,8 +328,6 @@ def futures_zh_spot(
             data_df["last_settle_price"] = pd.to_numeric(
                 data_df["last_settle_price"]
             )
-            data_df.dropna(subset=["current_price"], inplace=True)
-            return data_df
         else:
             data_df.columns = [
                 "open",
@@ -408,203 +406,199 @@ def futures_zh_spot(
             data_df["volume"] = pd.to_numeric(data_df["volume"])
             data_df["amount"] = pd.to_numeric(data_df["amount"])
 
-            data_df.dropna(subset=["current_price"], inplace=True)
-            return data_df
-    else:
-        if market == "CF":
-            # 此处由于 20220601 接口变动，增加了字段，此处增加异常判断，except 后为新代码
-            try:
-                data_df.columns = [
-                    "symbol",
-                    "time",
-                    "open",
-                    "high",
-                    "low",
-                    "last_close",
-                    "bid_price",
-                    "ask_price",
-                    "current_price",
-                    "avg_price",
-                    "last_settle_price",
-                    "buy_vol",
-                    "sell_vol",
-                    "hold",
-                    "volume",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                ]
-            except:
-                data_df.columns = [
-                    "symbol",
-                    "time",
-                    "open",
-                    "high",
-                    "low",
-                    "last_close",
-                    "bid_price",
-                    "ask_price",
-                    "current_price",
-                    "avg_price",
-                    "last_settle_price",
-                    "buy_vol",
-                    "sell_vol",
-                    "hold",
-                    "volume",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                    "_",
-                ]
-            data_df = data_df[
-                [
-                    "symbol",
-                    "time",
-                    "open",
-                    "high",
-                    "low",
-                    "current_price",
-                    "bid_price",
-                    "ask_price",
-                    "buy_vol",
-                    "sell_vol",
-                    "hold",
-                    "volume",
-                    "avg_price",
-                    "last_close",
-                    "last_settle_price",
-                ]
-            ]
-
-            data_df["open"] = pd.to_numeric(data_df["open"])
-            data_df["high"] = pd.to_numeric(data_df["high"])
-            data_df["low"] = pd.to_numeric(data_df["low"])
-            data_df["current_price"] = pd.to_numeric(data_df["current_price"])
-            data_df["bid_price"] = pd.to_numeric(data_df["bid_price"])
-            data_df["ask_price"] = pd.to_numeric(data_df["ask_price"])
-            data_df["buy_vol"] = pd.to_numeric(data_df["buy_vol"])
-            data_df["sell_vol"] = pd.to_numeric(data_df["sell_vol"])
-            data_df["hold"] = pd.to_numeric(data_df["hold"])
-            data_df["volume"] = pd.to_numeric(data_df["volume"])
-            data_df["avg_price"] = pd.to_numeric(data_df["avg_price"])
-            data_df["last_close"] = pd.to_numeric(data_df["last_close"])
-            data_df["last_settle_price"] = pd.to_numeric(
-                data_df["last_settle_price"]
-            )
-
-            data_df.dropna(subset=["current_price"], inplace=True)
-            return data_df
-        else:
+    elif market == "CF":
+        # 此处由于 20220601 接口变动，增加了字段，此处增加异常判断，except 后为新代码
+        try:
             data_df.columns = [
+                "symbol",
+                "time",
+                "open",
+                "high",
+                "low",
+                "last_close",
+                "bid_price",
+                "ask_price",
+                "current_price",
+                "avg_price",
+                "last_settle_price",
+                "buy_vol",
+                "sell_vol",
+                "hold",
+                "volume",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+            ]
+        except:
+            data_df.columns = [
+                "symbol",
+                "time",
+                "open",
+                "high",
+                "low",
+                "last_close",
+                "bid_price",
+                "ask_price",
+                "current_price",
+                "avg_price",
+                "last_settle_price",
+                "buy_vol",
+                "sell_vol",
+                "hold",
+                "volume",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+            ]
+        data_df = data_df[
+            [
+                "symbol",
+                "time",
                 "open",
                 "high",
                 "low",
                 "current_price",
+                "bid_price",
+                "ask_price",
+                "buy_vol",
+                "sell_vol",
+                "hold",
+                "volume",
+                "avg_price",
+                "last_close",
+                "last_settle_price",
+            ]
+        ]
+
+        data_df["open"] = pd.to_numeric(data_df["open"])
+        data_df["high"] = pd.to_numeric(data_df["high"])
+        data_df["low"] = pd.to_numeric(data_df["low"])
+        data_df["current_price"] = pd.to_numeric(data_df["current_price"])
+        data_df["bid_price"] = pd.to_numeric(data_df["bid_price"])
+        data_df["ask_price"] = pd.to_numeric(data_df["ask_price"])
+        data_df["buy_vol"] = pd.to_numeric(data_df["buy_vol"])
+        data_df["sell_vol"] = pd.to_numeric(data_df["sell_vol"])
+        data_df["hold"] = pd.to_numeric(data_df["hold"])
+        data_df["volume"] = pd.to_numeric(data_df["volume"])
+        data_df["avg_price"] = pd.to_numeric(data_df["avg_price"])
+        data_df["last_close"] = pd.to_numeric(data_df["last_close"])
+        data_df["last_settle_price"] = pd.to_numeric(
+            data_df["last_settle_price"]
+        )
+
+    else:
+        data_df.columns = [
+            "open",
+            "high",
+            "low",
+            "current_price",
+            "volume",
+            "amount",
+            "hold",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_" "_",
+            "time",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "_",
+            "symbol",
+        ]
+        data_df = data_df[
+            [
+                "symbol",
+                "time",
+                "open",
+                "high",
+                "low",
+                "current_price",
+                "hold",
                 "volume",
                 "amount",
-                "hold",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_" "_",
-                "time",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "_",
-                "symbol",
             ]
-            data_df = data_df[
-                [
-                    "symbol",
-                    "time",
-                    "open",
-                    "high",
-                    "low",
-                    "current_price",
-                    "hold",
-                    "volume",
-                    "amount",
-                ]
-            ]
-            data_df["open"] = pd.to_numeric(data_df["open"])
-            data_df["high"] = pd.to_numeric(data_df["high"])
-            data_df["low"] = pd.to_numeric(data_df["low"])
-            data_df["current_price"] = pd.to_numeric(data_df["current_price"])
-            data_df["hold"] = pd.to_numeric(data_df["hold"])
-            data_df["volume"] = pd.to_numeric(data_df["volume"])
-            data_df["amount"] = pd.to_numeric(data_df["amount"])
+        ]
+        data_df["open"] = pd.to_numeric(data_df["open"])
+        data_df["high"] = pd.to_numeric(data_df["high"])
+        data_df["low"] = pd.to_numeric(data_df["low"])
+        data_df["current_price"] = pd.to_numeric(data_df["current_price"])
+        data_df["hold"] = pd.to_numeric(data_df["hold"])
+        data_df["volume"] = pd.to_numeric(data_df["volume"])
+        data_df["amount"] = pd.to_numeric(data_df["amount"])
 
-            data_df.dropna(subset=["current_price"], inplace=True)
-            return data_df
+
+    data_df.dropna(subset=["current_price"], inplace=True)
+    return data_df
 
 
 def futures_zh_minute_sina(

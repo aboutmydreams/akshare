@@ -75,8 +75,7 @@ def macro_swiss_svme():
     :return: SVME采购经理人指数
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_swiss_core(symbol="EMG00341602")
-    return temp_df
+    return macro_swiss_core(symbol="EMG00341602")
 
 
 # 贸易帐
@@ -87,8 +86,7 @@ def macro_swiss_trade():
     :return: 贸易帐
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_swiss_core(symbol="EMG00341603")
-    return temp_df
+    return macro_swiss_core(symbol="EMG00341603")
 
 
 # 消费者物价指数年率
@@ -99,8 +97,7 @@ def macro_swiss_cpi_yearly():
     :return: 消费者物价指数年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_swiss_core(symbol="EMG00341604")
-    return temp_df
+    return macro_swiss_core(symbol="EMG00341604")
 
 
 # GDP季率
@@ -111,8 +108,7 @@ def macro_swiss_gdp_quarterly():
     :return: GDP季率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_swiss_core(symbol="EMG00341600")
-    return temp_df
+    return macro_swiss_core(symbol="EMG00341600")
 
 
 # GDP年率
@@ -123,8 +119,7 @@ def macro_swiss_gbd_yearly():
     :return: GDP年率
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_swiss_core(symbol="EMG00341601")
-    return temp_df
+    return macro_swiss_core(symbol="EMG00341601")
 
 
 # 央行公布利率决议
@@ -135,8 +130,7 @@ def macro_swiss_gbd_bank_rate():
     :return: 央行公布利率决议
     :rtype: pandas.DataFrame
     """
-    temp_df = macro_swiss_core(symbol="EMG00341606")
-    return temp_df
+    return macro_swiss_core(symbol="EMG00341606")
 
 
 if __name__ == '__main__':

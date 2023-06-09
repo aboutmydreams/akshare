@@ -34,7 +34,7 @@ def index_code_id_map_em() -> dict:
     r = requests.get(url, params=params)
     data_json = r.json()
     if not data_json["data"]["diff"]:
-        return dict()
+        return {}
     temp_df = pd.DataFrame(data_json["data"]["diff"])
     temp_df["market_id"] = 1
     temp_df.columns = ["sh_code", "sh_id"]
@@ -55,10 +55,10 @@ def index_code_id_map_em() -> dict:
     r = requests.get(url, params=params)
     data_json = r.json()
     if not data_json["data"]["diff"]:
-        return dict()
+        return {}
     temp_df_sz = pd.DataFrame(data_json["data"]["diff"])
     temp_df_sz["sz_id"] = 0
-    code_id_dict.update(dict(zip(temp_df_sz["f12"], temp_df_sz["sz_id"])))
+    code_id_dict |= dict(zip(temp_df_sz["f12"], temp_df_sz["sz_id"]))
     params = {
         "pn": "1",
         "pz": "10000",
@@ -75,10 +75,10 @@ def index_code_id_map_em() -> dict:
     r = requests.get(url, params=params)
     data_json = r.json()
     if not data_json["data"]["diff"]:
-        return dict()
+        return {}
     temp_df_sz = pd.DataFrame(data_json["data"]["diff"])
     temp_df_sz["bj_id"] = 0
-    code_id_dict.update(dict(zip(temp_df_sz["f12"], temp_df_sz["bj_id"])))
+    code_id_dict |= dict(zip(temp_df_sz["f12"], temp_df_sz["bj_id"]))
     code_id_dict = {
         key: value - 1 if value == 1 else value + 1
         for key, value in code_id_dict.items()
@@ -149,32 +149,32 @@ def index_zh_a_hist(
             }
             r = requests.get(url, params=params)
             data_json = r.json()
-            if data_json["data"] is None:
-                params = {
-                    "secid": f"2.{symbol}",
-                    "ut": "7eea3edcaed734bea9cbfc24409ed989",
-                    "fields1": "f1,f2,f3,f4,f5,f6",
-                    "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
-                    "klt": period_dict[period],
-                    "fqt": "0",
-                    "beg": "0",
-                    "end": "20500000",
-                    "_": "1623766962675",
-                }
-                r = requests.get(url, params=params)
-                data_json = r.json()
-                if data_json["data"] is None:
-                    params = {
-                        "secid": f"47.{symbol}",
-                        "ut": "7eea3edcaed734bea9cbfc24409ed989",
-                        "fields1": "f1,f2,f3,f4,f5,f6",
-                        "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
-                        "klt": period_dict[period],
-                        "fqt": "0",
-                        "beg": "0",
-                        "end": "20500000",
-                        "_": "1623766962675",
-                    }
+        if data_json["data"] is None:
+            params = {
+                "secid": f"2.{symbol}",
+                "ut": "7eea3edcaed734bea9cbfc24409ed989",
+                "fields1": "f1,f2,f3,f4,f5,f6",
+                "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
+                "klt": period_dict[period],
+                "fqt": "0",
+                "beg": "0",
+                "end": "20500000",
+                "_": "1623766962675",
+            }
+            r = requests.get(url, params=params)
+            data_json = r.json()
+        if data_json["data"] is None:
+            params = {
+                "secid": f"47.{symbol}",
+                "ut": "7eea3edcaed734bea9cbfc24409ed989",
+                "fields1": "f1,f2,f3,f4,f5,f6",
+                "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
+                "klt": period_dict[period],
+                "fqt": "0",
+                "beg": "0",
+                "end": "20500000",
+                "_": "1623766962675",
+            }
     r = requests.get(url, params=params)
     data_json = r.json()
     try:
@@ -285,16 +285,16 @@ def index_zh_a_hist_min_em(
                 }
                 r = requests.get(url, params=params)
                 data_json = r.json()
-                if data_json["data"] is None:
-                    params = {
-                        "fields1": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13",
-                        "fields2": "f51,f52,f53,f54,f55,f56,f57,f58",
-                        "ut": "fa5fd1943c7b386f172d6893dbfba10b",
-                        "iscr": "0",
-                        "ndays": "5",
-                        "secid": f"47.{symbol}",
-                        "_": "1623766962675",
-                    }
+            if data_json["data"] is None:
+                params = {
+                    "fields1": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13",
+                    "fields2": "f51,f52,f53,f54,f55,f56,f57,f58",
+                    "ut": "fa5fd1943c7b386f172d6893dbfba10b",
+                    "iscr": "0",
+                    "ndays": "5",
+                    "secid": f"47.{symbol}",
+                    "_": "1623766962675",
+                }
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(
@@ -321,7 +321,6 @@ def index_zh_a_hist_min_em(
         temp_df["成交额"] = pd.to_numeric(temp_df["成交额"])
         temp_df["最新价"] = pd.to_numeric(temp_df["最新价"])
         temp_df["时间"] = pd.to_datetime(temp_df["时间"]).astype(str)
-        return temp_df
     else:
         url = "http://push2his.eastmoney.com/api/qt/stock/kline/get"
         try:
@@ -364,18 +363,18 @@ def index_zh_a_hist_min_em(
                 }
                 r = requests.get(url, params=params)
                 data_json = r.json()
-                if data_json["data"] is None:
-                    params = {
-                        "secid": f"47.{symbol}",
-                        "ut": "7eea3edcaed734bea9cbfc24409ed989",
-                        "fields1": "f1,f2,f3,f4,f5,f6",
-                        "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
-                        "klt": period,
-                        "fqt": "1",
-                        "beg": "0",
-                        "end": "20500000",
-                        "_": "1630930917857",
-                    }
+            if data_json["data"] is None:
+                params = {
+                    "secid": f"47.{symbol}",
+                    "ut": "7eea3edcaed734bea9cbfc24409ed989",
+                    "fields1": "f1,f2,f3,f4,f5,f6",
+                    "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
+                    "klt": period,
+                    "fqt": "1",
+                    "beg": "0",
+                    "end": "20500000",
+                    "_": "1630930917857",
+                }
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(
@@ -423,7 +422,8 @@ def index_zh_a_hist_min_em(
                 "换手率",
             ]
         ]
-        return temp_df
+
+    return temp_df
 
 
 if __name__ == "__main__":

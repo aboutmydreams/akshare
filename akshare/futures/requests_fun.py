@@ -36,7 +36,7 @@ def requests_link(url: str, encoding: str = "utf-8", method: str = "get", data: 
                 raise ValueError("请提供正确的请求方式")
         except:
             i += 1
-            print(f"第{str(i)}次链接失败, 最多尝试 20 次")
+            print(f"第{i}次链接失败, 最多尝试 20 次")
             time.sleep(5)
             if i > 20:
                 return None
@@ -69,7 +69,7 @@ def pandas_read_html_link(url: str, encoding: str = "utf-8", method: str = "get"
                 raise ValueError("请提供正确的请求方式")
         except requests.exceptions.Timeout as e:
             i += 1
-            print(f"第{str(i)}次链接失败, 最多尝试20次", e)
+            print(f"第{i}次链接失败, 最多尝试20次", e)
             time.sleep(5)
             if i > 20:
                 return None

@@ -32,8 +32,7 @@ def _get_index_data(wid, time_type):
         "index": json_df["data"][0]["trend"]["x"],
         "value": json_df["data"][0]["trend"]["s"],
     }
-    df = pd.DataFrame(data)
-    return df
+    return pd.DataFrame(data)
 
 
 def _process_index(index):
@@ -64,12 +63,9 @@ def weibo_index(word="python", time_type="3month"):
             df["index"] = df["index"].apply(lambda x: _process_index(x))
             df.set_index("index", inplace=True)
             df_list.append(df)
-    if len(df_list) > 0:
+    if df_list:
         df = pd.concat(df_list, axis=1)
-        if time_type == "1hour" or "1day":
-            df.index = pd.to_datetime(df.index)
-        else:
-            df.index = pd.to_datetime(df.index, format="%Y%m%d")
+        df.index = pd.to_datetime(df.index)
         return df
 
 

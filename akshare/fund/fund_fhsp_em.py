@@ -32,7 +32,7 @@ def fund_fh_em() -> pd.DataFrame:
     total_page = eval(data_text[data_text.find("=") + 1: data_text.find(";")])[0]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         data_text = r.text
         temp_list = eval(
@@ -82,11 +82,12 @@ def fund_cf_em() -> pd.DataFrame:
     total_page = eval(data_text[data_text.find("=") + 1: data_text.find(";")])[0]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         data_text = r.text
-        temp_str = data_text[data_text.find("[["): data_text.find(";var jjcf_jjgs")]
-        if temp_str:
+        if temp_str := data_text[
+            data_text.find("[[") : data_text.find(";var jjcf_jjgs")
+        ]:
             temp_list = eval(temp_str)
             temp_df = pd.DataFrame(temp_list)
             big_df = pd.concat([big_df, temp_df], ignore_index=True)
@@ -130,7 +131,7 @@ def fund_fh_rank_em() -> pd.DataFrame:
     total_page = eval(data_text[data_text.find("=") + 1: data_text.find(";")])[0]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"page": page})
+        params["page"] = page
         r = requests.get(url, params=params)
         data_text = r.text
         temp_list = eval(

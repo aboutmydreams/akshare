@@ -65,12 +65,10 @@ def news_cctv(date: str = "20130308") -> pd.DataFrame:
                 )
             except:
                 continue
-        temp_df = pd.DataFrame(
+        return pd.DataFrame(
             [[date] * len(title_list), title_list, content_list],
             index=["date", "title", "content"],
         ).T
-        return temp_df
-
     elif int(date) < int("20160203"):
         url = f"http://cctv.cntv.cn/lm/xinwenlianbo/{date}.shtml"
         r = requests.get(url)
@@ -116,11 +114,10 @@ def news_cctv(date: str = "20130308") -> pd.DataFrame:
                 )
             except:
                 continue
-        temp_df = pd.DataFrame(
+        return pd.DataFrame(
             [[date] * len(title_list), title_list, content_list],
             index=["date", "title", "content"],
         ).T
-        return temp_df
     elif int(date) > int("20160203"):
         url = f"https://tv.cctv.com/lm/xwlb/day/{date}.shtml"
         r = requests.get(url)
@@ -169,11 +166,10 @@ def news_cctv(date: str = "20130308") -> pd.DataFrame:
                 )
             except:
                 continue
-        temp_df = pd.DataFrame(
+        return pd.DataFrame(
             [[date] * len(title_list), title_list, content_list],
             index=["date", "title", "content"],
         ).T
-        return temp_df
 
 
 if __name__ == "__main__":

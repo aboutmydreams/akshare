@@ -212,7 +212,7 @@ def get_gfex_daily(date: str = "20221223") -> pd.DataFrame:
     if day.strftime("%Y%m%d") not in calendar:
         # warnings.warn(f"{day.strftime('%Y%m%d')}非交易日")
         return
-    url = f"http://www.gfex.com.cn/u/interfacesWebTiDayQuotes/loadList"
+    url = "http://www.gfex.com.cn/u/interfacesWebTiDayQuotes/loadList"
     payload = {
         'trade_date': date,
         'trade_type': '0'
@@ -327,8 +327,7 @@ def get_ine_daily(date: str = "20220208") -> pd.DataFrame:
             .iloc[:, 0]
         )
     result_df = result_df[result_df["symbol"] != "总计"]
-    result_df = result_df[~result_df["symbol"].str.contains("efp")]
-    return result_df
+    return result_df[~result_df["symbol"].str.contains("efp")]
 
 
 def get_czce_daily(date: str = "20050525") -> pd.DataFrame:
@@ -373,7 +372,7 @@ def get_czce_daily(date: str = "20050525") -> pd.DataFrame:
                     reason,
                 )
             return
-        if html.find("您的访问出错了") >= 0 or html.find("无期权每日行情交易记录") >= 0:
+        if "您的访问出错了" in html or "无期权每日行情交易记录" in html:
             return
         html = [
             i.replace(" ", "").split("|")
@@ -384,7 +383,7 @@ def get_czce_daily(date: str = "20050525") -> pd.DataFrame:
         if day > datetime.date(2015, 11, 11):
             if html[1][0] not in ["品种月份", "品种代码", "合约代码"]:
                 return
-            dict_data = list()
+            dict_data = []
             day_const = int(day.strftime("%Y%m%d"))
             for row in html[2:]:
                 m = cons.FUTURES_SYMBOL_PATTERN.match(row[0])
@@ -396,7 +395,7 @@ def get_czce_daily(date: str = "20050525") -> pd.DataFrame:
                     "variety": m.group(1),
                 }
                 for i, field in enumerate(listed_columns):
-                    if row[i + 1] == "\r" or row[i + 1] == "":
+                    if row[i + 1] in ["\r", ""]:
                         row_dict[field] = 0.0
                     elif field in [
                         "volume",
@@ -412,7 +411,7 @@ def get_czce_daily(date: str = "20050525") -> pd.DataFrame:
                 dict_data.append(row_dict)
             return pd.DataFrame(dict_data)[output_columns]
         elif day <= datetime.date(2015, 11, 11):
-            dict_data = list()
+            dict_data = []
             day_const = int(day.strftime("%Y%m%d"))
             for row in html[1:]:
                 row = row[0].split(",")
@@ -440,8 +439,7 @@ def get_czce_daily(date: str = "20050525") -> pd.DataFrame:
             return pd.DataFrame(dict_data)[output_columns]
 
     if day <= datetime.date(2010, 8, 24):
-        _futures_daily_czce_df = _futures_daily_czce(date)
-        return _futures_daily_czce_df
+        return _futures_daily_czce(date)
 
 
 def get_shfe_v_wap(date: str = "20131017") -> pd.DataFrame:
@@ -538,8 +536,7 @@ def get_shfe_daily(date: str = "20220415") -> pd.DataFrame:
         [
             row
             for row in json_data["o_curinstrument"]
-            if row["DELIVERYMONTH"] not in ["小计", "合计"]
-            and row["DELIVERYMONTH"] != ""
+            if row["DELIVERYMONTH"] not in ["小计", "合计", ""]
         ]
     )
     try:
@@ -716,14 +713,14 @@ def get_futures_daily(
         )
     )
 
-    df_list = list()
+    df_list = []
     while start_date <= end_date:
         df = f(date=str(start_date).replace("-", ""))
         if df is not None:
             df_list.append(df)
         start_date += datetime.timedelta(days=1)
 
-    if len(df_list) > 0:
+    if df_list:
         temp_df = pd.concat(df_list).reset_index(drop=True)
         temp_df = temp_df[~temp_df["symbol"].str.contains("efp")]
         return temp_df

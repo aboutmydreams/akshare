@@ -42,8 +42,8 @@ def macro_euro_gdp_yoy() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -99,8 +99,8 @@ def macro_euro_cpi_mom() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -154,8 +154,8 @@ def macro_euro_cpi_yoy() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -209,8 +209,8 @@ def macro_euro_ppi_mom() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -264,8 +264,8 @@ def macro_euro_retail_sales_mom() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -319,8 +319,8 @@ def macro_euro_employment_change_qoq() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -374,8 +374,8 @@ def macro_euro_unemployment_rate_mom() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -429,8 +429,8 @@ def macro_euro_trade_balance() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -484,8 +484,8 @@ def macro_euro_current_account_mom() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -539,8 +539,8 @@ def macro_euro_industrial_production_mom() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -594,8 +594,8 @@ def macro_euro_manufacturing_pmi() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -649,8 +649,8 @@ def macro_euro_services_pmi() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -703,8 +703,8 @@ def macro_euro_zew_economic_sentiment() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",
@@ -757,8 +757,8 @@ def macro_euro_sentix_investor_confidence() -> pd.DataFrame:
     date_list = data_json["data"]
     date_point_list = [item for num, item in enumerate(date_list) if num % 20 == 0]
     big_df = pd.DataFrame()
+    url = "https://datacenter-api.jin10.com/reports/list_v2"
     for date in tqdm(date_point_list, leave=False):
-        url = "https://datacenter-api.jin10.com/reports/list_v2"
         params = {
             "max_date": f"{date}",
             "category": "ec",

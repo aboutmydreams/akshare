@@ -19,11 +19,10 @@ def sunrise_city_list() -> list:
     """
     url = "https://www.timeanddate.com/astronomy/china"
     res = requests.get(url)
-    city_list = []
     china_city_one_df = pd.read_html(res.text)[1]
     china_city_two_df = pd.read_html(res.text)[2]
 
-    city_list.extend([item.lower() for item in china_city_one_df.iloc[:, 0].tolist()])
+    city_list = [item.lower() for item in china_city_one_df.iloc[:, 0].tolist()]
     city_list.extend([item.lower() for item in china_city_one_df.iloc[:, 3].tolist()])
     city_list.extend([item.lower() for item in china_city_one_df.iloc[:, 6].tolist()])
 

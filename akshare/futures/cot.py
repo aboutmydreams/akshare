@@ -138,7 +138,7 @@ def get_rank_sum(
         cons.convert_date(date) if date is not None else datetime.date.today()
     )
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return None
     dce_var = [
         i for i in vars_list if i in cons.market_exchange_symbols["dce"]
@@ -153,29 +153,29 @@ def get_rank_sum(
         i for i in vars_list if i in cons.market_exchange_symbols["cffex"]
     ]
     big_dict = {}
-    if len(dce_var) > 0:
+    if dce_var:
         data = get_dce_rank_table(date, dce_var)
         if data is False:
             return False
-        big_dict.update(data)
-    if len(shfe_var) > 0:
+        big_dict |= data
+    if shfe_var:
         data = get_shfe_rank_table(date, shfe_var)
         if data is False:
             return False
         big_dict.update(data)
-    if len(czce_var) > 0:
+    if czce_var:
         data = get_czce_rank_table(date, czce_var)
         if data is False:
             return False
         big_dict.update(data)
-    if len(cffex_var) > 0:
+    if cffex_var:
         data = get_cffex_rank_table(date, cffex_var)
         if data is False:
             return False
         big_dict.update(data)
     records = pd.DataFrame()
 
-    for symbol, table in big_dict.items():
+    for table in big_dict.values():
         table = table.applymap(lambda x: 0 if x == "" else x)
         for symbol_inner in set(table["symbol"]):
 
@@ -312,7 +312,7 @@ def get_shfe_rank_table(date=None, vars_list=cons.contract_symbols):
         print("shfe数据源开始日期为20020107，跳过")
         return {}
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return {}
     url = cons.SHFE_VOL_RANK_URL % (date.strftime("%Y%m%d"))
     r = requests_link(url, "utf-8", headers=cons.shfe_headers)
@@ -385,7 +385,7 @@ def _czce_df_read(url, skip_rows, encoding="utf-8", header=0):
         "Cookie": "XquW6dFMPxV380S=CAaD3sMkdXv3fUoaJlICIEv0MVegGq5EoMyBcxkOjCgSjmpuovYFuTLtYFcxTZGw; XquW6dFMPxV380T=5QTTjUlA6f6WiDO7fMGmqNxHBWz.hKIc8lb_tc1o4nHrJM4nsXCAI9VHaKyV_jkHh4cIVvD25kGQAh.MvLL1SHRA20HCG9mVVHPhAzktNdPK3evjm0NYbTg2Gu_XGGtPhecxLvdFQ0.JlAxy_z0C15_KdO8kOI18i4K0rFERNPxjXq5qG1Gs.QiOm976wODY.pe8XCQtAsuLYJ.N4DpTgNfHJp04jhMl0SntHhr.jhh3dFjMXBx.JEHngXBzY6gQAhER7uSKAeSktruxFeuKlebse.vrPghHqWvJm4WPTEvDQ8q",
     }
     r = requests_link(url, encoding, headers=headers)
-    data = pd.read_html(
+    return pd.read_html(
         r.text,
         match=".+",
         flavor=None,
@@ -401,7 +401,6 @@ def _czce_df_read(url, skip_rows, encoding="utf-8", header=0):
         na_values=None,
         keep_default_na=True,
     )
-    return data
 
 
 def get_czce_rank_table(
@@ -434,7 +433,7 @@ def get_czce_rank_table(
         print("CZCE可获取的数据源开始日期为 20151008, 请输入合适的日期参数")
         return {}
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return {}
     if date >= datetime.date(2015, 10, 8):
         url = f"http://www.czce.com.cn/cn/DFSStaticFiles/Future/{date.year}/{date.isoformat().replace('-', '')}/FutureDataHolding.xls"
@@ -586,7 +585,7 @@ def get_dce_rank_table(
         print(Exception("大连商品交易所数据源开始日期为 20060104，跳过"))
         return {}
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return {}
     vars_list = [
         i for i in vars_list if i in cons.market_exchange_symbols["dce"]
@@ -740,7 +739,7 @@ def get_cffex_rank_table(date="20200427", vars_list=cons.contract_symbols):
         print(Exception("cffex数据源开始日期为20100416，跳过"))
         return {}
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return {}
     big_dict = {}
     for var in vars_list:
@@ -814,7 +813,7 @@ def futures_dce_position_rank(date: str = "20160919") -> dict:
         cons.convert_date(date) if date is not None else datetime.date.today()
     )
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return {}
     url = "http://www.dce.com.cn/publicweb/quotesdata/exportMemberDealPosiQuotesBatchData.html"
     headers = {
@@ -843,7 +842,7 @@ def futures_dce_position_rank(date: str = "20160919") -> dict:
         "batchExportFlag": "batch",
     }
     r = requests.post(url, payload, headers=headers)
-    big_dict = dict()
+    big_dict = {}
     with zipfile.ZipFile(BytesIO(r.content), "r") as z:
         for i in z.namelist():
             file_name = i.encode("cp437").decode("GBK")
@@ -1027,7 +1026,7 @@ def futures_dce_position_rank_other(date: str = "20160104"):
         cons.convert_date(date) if date is not None else datetime.date.today()
     )
     if date.strftime("%Y%m%d") not in calendar:
-        warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
+        warnings.warn(f'{date.strftime("%Y%m%d")}非交易日')
         return {}
     url = (
         "http://www.dce.com.cn/publicweb/quotesdata/memberDealPosiQuotes.html"
@@ -1050,7 +1049,7 @@ def futures_dce_position_rank_other(date: str = "20160104"):
             "input"
         )
     ]
-    big_df = dict()
+    big_df = {}
     for symbol in symbol_list:
         payload = {
             "memberDealPosiQuotes.variety": symbol,
@@ -1064,11 +1063,10 @@ def futures_dce_position_rank_other(date: str = "20160104"):
         }
         r = requests.post(url, data=payload)
         soup = BeautifulSoup(r.text, "lxml")
-        contract_list = [
+        if contract_list := [
             item["onclick"].strip("javascript:setContract_id('").strip("');")
             for item in soup.find_all(attrs={"name": "contract"})
-        ]
-        if contract_list:
+        ]:
             if len(contract_list[0]) == 4:
                 contract_list = [symbol + item for item in contract_list]
                 for contract in contract_list:

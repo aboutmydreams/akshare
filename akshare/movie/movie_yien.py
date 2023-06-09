@@ -25,8 +25,7 @@ def _get_js_path(name: str = "", module_file: str = "") -> str:
     :rtype: str
     """
     module_folder = os.path.abspath(os.path.dirname(os.path.dirname(module_file)))
-    module_json_path = os.path.join(module_folder, "movie", name)
-    return module_json_path
+    return os.path.join(module_folder, "movie", name)
 
 
 def _get_file_content(file_name: str = "jm.js"):
@@ -70,8 +69,7 @@ def decrypt(origin_data: str = "") -> str:
     file_data = _get_file_content(file_name="jm.js")
     ctx = py_mini_racer.MiniRacer()
     ctx.eval(file_data)
-    data = ctx.call("webInstace.shell", origin_data)
-    return data
+    return ctx.call("webInstace.shell", origin_data)
 
 
 def movie_boxoffice_realtime() -> pd.DataFrame:
@@ -81,7 +79,7 @@ def movie_boxoffice_realtime() -> pd.DataFrame:
     :return: 实时票房数据
     :rtype: pandas.DataFrame
     """
-    today = datetime.datetime.today().date().strftime("%Y%m%d")
+    today = datetime.datetime.now().date().strftime("%Y%m%d")
     url = "https://www.endata.com.cn/API/GetData.ashx"
     payload = {
         "showDate": "",
@@ -94,8 +92,7 @@ def movie_boxoffice_realtime() -> pd.DataFrame:
     temp_df = pd.DataFrame(data_json["Data"]["Table1"])
     temp_df = temp_df.iloc[:, :7]
     temp_df.columns = ["排序", "_", "影片名称", "实时票房", "累计票房", "上映天数", "票房占比"]
-    temp_df = temp_df[["排序", "影片名称", "实时票房", "票房占比", "上映天数", "累计票房"]]
-    return temp_df
+    return temp_df[["排序", "影片名称", "实时票房", "票房占比", "上映天数", "累计票房"]]
 
 
 def movie_boxoffice_daily(date: str = "20201018") -> pd.DataFrame:

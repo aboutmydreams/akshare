@@ -27,13 +27,8 @@ def index_bloomberg_billionaires_hist(year: str = "2021") -> pd.DataFrame:
     if "Rank" not in heads.text:
         heads = trs[0]
     dic_keys = []
-    dic = {}
-    for head in heads:
-        head = head.text
-        dic_keys.append(head)
-    for dic_key in dic_keys:
-        dic[dic_key] = []
-
+    dic_keys.extend(head.text for head in heads)
+    dic = {dic_key: [] for dic_key in dic_keys}
     for l in trs:
         item = l.findAll("td")
         for i in range(len(item)):
@@ -85,7 +80,7 @@ def index_bloomberg_billionaires() -> pd.DataFrame:
     }
     r = requests.get(url, headers=headers)
     soup = BeautifulSoup(r.text, "lxml")
-    big_content_list = list()
+    big_content_list = []
     soup_node = soup.find(attrs={"class": "table-chart"}).find_all(
         attrs={"class": "table-row"}
     )

@@ -41,8 +41,7 @@ def bond_china_close_return_map() -> pd.DataFrame:
     }
     r = requests.post(url, headers=headers)
     data_json = r.json()
-    temp_df = pd.DataFrame(data_json["records"])
-    return temp_df
+    return pd.DataFrame(data_json["records"])
 
 
 def bond_china_close_return(

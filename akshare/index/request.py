@@ -32,11 +32,7 @@ def nested_to_record(
             # each key gets renamed with prefix
             if not isinstance(k, str):
                 k = str(k)
-            if level == 0:
-                newkey = k
-            else:
-                newkey = prefix + sep + k
-
+            newkey = k if level == 0 else prefix + sep + k
             # flatten if type is dict and
             # current dict level  < maximum level provided and
             # only dicts gets recurse-flattened
@@ -53,9 +49,7 @@ def nested_to_record(
                 new_d.update(nested_to_record(v, newkey, sep, level + 1, max_level))
         new_ds.append(new_d)
 
-    if singleton:
-        return new_ds[0]
-    return new_ds
+    return new_ds[0] if singleton else new_ds
 
 
 class TrendReq(object):
@@ -101,7 +95,7 @@ class TrendReq(object):
         self.tz = tz
         self.hl = hl
         self.geo = geo
-        self.kw_list = list()
+        self.kw_list = []
         self.timeout = timeout
         self.proxies = proxies  # add a proxy option
         self.retries = retries
@@ -109,11 +103,11 @@ class TrendReq(object):
         self.proxy_index = 0
         self.cookies = self.GetGoogleCookie()
         # intialize widget payloads
-        self.token_payload = dict()
-        self.interest_over_time_widget = dict()
-        self.interest_by_region_widget = dict()
-        self.related_topics_widget_list = list()
-        self.related_queries_widget_list = list()
+        self.token_payload = {}
+        self.interest_over_time_widget = {}
+        self.interest_by_region_widget = {}
+        self.related_topics_widget_list = []
+        self.related_queries_widget_list = []
 
     def GetGoogleCookie(self):
         """
@@ -186,30 +180,27 @@ class TrendReq(object):
             response = s.get(
                 url, timeout=self.timeout, cookies=self.cookies, **kwargs
             )  # DO NOT USE retries or backoff_factor here
-        # check if the response contains json and throw an exception otherwise
-        # Google mostly sends 'application/json' in the Content-Type header,
-        # but occasionally it sends 'application/javascript
-        # and sometimes even 'text/javascript
         if (
-            response.status_code == 200
-            and "application/json" in response.headers["Content-Type"]
-            or "application/javascript" in response.headers["Content-Type"]
-            or "text/javascript" in response.headers["Content-Type"]
+            (
+                response.status_code != 200
+                or "application/json" not in response.headers["Content-Type"]
+            )
+            and "application/javascript" not in response.headers["Content-Type"]
+            and "text/javascript" not in response.headers["Content-Type"]
         ):
-            # trim initial characters
-            # some responses start with garbage characters, like ")]}',"
-            # these have to be cleaned before being passed to the json parser
-            content = response.text[trim_chars:]
-            # parse json
-            self.GetNewProxy()
-            return json.loads(content)
-        else:
             # error
             raise exceptions.ResponseError(
                 "The request failed: Google returned a "
                 "response with code {0}.".format(response.status_code),
                 response=response,
             )
+        # trim initial characters
+        # some responses start with garbage characters, like ")]}',"
+        # these have to be cleaned before being passed to the json parser
+        content = response.text[trim_chars:]
+        # parse json
+        self.GetNewProxy()
+        return json.loads(content)
 
     def build_payload(self, kw_list, cat=0, timeframe="today 5-y", geo="", gprop=""):
         """Create the payload for related queries, interest over time and interest by region"""
@@ -316,8 +307,6 @@ class TrendReq(object):
     ):
         """Request data from Google's Interest by Region section and return a dataframe"""
 
-        # make the request
-        region_payload = dict()
         if self.geo == "":
             self.interest_by_region_widget["request"]["resolution"] = resolution
         elif self.geo == "US" and resolution in ["DMA", "CITY", "REGION"]:
@@ -327,8 +316,7 @@ class TrendReq(object):
             "includeLowSearchVolumeGeos"
         ] = inc_low_vol
 
-        # convert to string as requests will mangle
-        region_payload["req"] = json.dumps(self.interest_by_region_widget["request"])
+        region_payload = {"req": json.dumps(self.interest_by_region_widget["request"])}
         region_payload["token"] = self.interest_by_region_widget["token"]
         region_payload["tz"] = self.tz
 
@@ -366,8 +354,8 @@ class TrendReq(object):
         """
 
         # make the request
-        related_payload = dict()
-        result_dict = dict()
+        related_payload = {}
+        result_dict = {}
         for request_json in self.related_topics_widget_list:
             # ensure we know which keyword we are looking at rather than relying on order
             kw = request_json["request"]["restriction"]["complexKeywordsRestriction"][
@@ -414,8 +402,8 @@ class TrendReq(object):
         """
 
         # make the request
-        related_payload = dict()
-        result_dict = dict()
+        related_payload = {}
+        result_dict = {}
         for request_json in self.related_queries_widget_list:
             # ensure we know which keyword we are looking at rather than relying on order
             kw = request_json["request"]["restriction"]["complexKeywordsRestriction"][
@@ -466,8 +454,7 @@ class TrendReq(object):
         req_json = self._get_data(
             url=TrendReq.TRENDING_SEARCHES_URL, method=TrendReq.GET_METHOD
         )[pn]
-        result_df = pd.DataFrame(req_json)
-        return result_df
+        return pd.DataFrame(req_json)
 
     def today_searches(self, pn="US"):
         """Request data from Google Daily Trends section and returns a dataframe"""
@@ -504,8 +491,7 @@ class TrendReq(object):
             trim_chars=5,
             params=chart_payload,
         )["topCharts"][0]["listItems"]
-        df = pd.DataFrame(req_json)
-        return df
+        return pd.DataFrame(req_json)
 
     def suggestions(self, keyword):
         """Request data from Google's Keyword Suggestion dropdown and return a dictionary"""
@@ -514,26 +500,24 @@ class TrendReq(object):
         kw_param = quote(keyword)
         parameters = {"hl": self.hl}
 
-        req_json = self._get_data(
+        return self._get_data(
             url=TrendReq.SUGGESTIONS_URL + kw_param,
             params=parameters,
             method=TrendReq.GET_METHOD,
             trim_chars=5,
         )["default"]["topics"]
-        return req_json
 
     def categories(self):
         """Request available categories data from Google's API and return a dictionary"""
 
         params = {"hl": self.hl}
 
-        req_json = self._get_data(
+        return self._get_data(
             url=TrendReq.CATEGORIES_URL,
             params=params,
             method=TrendReq.GET_METHOD,
             trim_chars=5,
         )
-        return req_json
 
     def get_historical_interest(
         self,
@@ -581,8 +565,6 @@ class TrendReq(object):
                 df = df.append(week_df)
             except Exception as e:
                 print(e)
-                pass
-
             start_date += delta
             date_iterator += delta
 
@@ -600,7 +582,6 @@ class TrendReq(object):
                     df = df.append(week_df)
                 except Exception as e:
                     print(e)
-                    pass
                 break
 
             # just in case you are rate-limited by Google. Recommended is 60 if you are.

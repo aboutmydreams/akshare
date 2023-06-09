@@ -36,9 +36,7 @@ def option_commodity_contract_sina(symbol: str = "玉米期权") -> pd.DataFrame
         for item in soup.find_all("li", attrs={"class": "active"})
         if item.find("a") is not None
     ]
-    comm_list_dict = {
-        key: value for key, value in zip(commodity_list, url_list)
-    }
+    comm_list_dict = dict(zip(commodity_list, url_list))
     url = "https://stock.finance.sina.com.cn" + comm_list_dict[symbol]
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "lxml")
@@ -86,9 +84,7 @@ def option_commodity_contract_table_sina(
         for item in soup.find_all("li", attrs={"class": "active"})
         if item.find("a") is not None
     ]
-    comm_list_dict = {
-        key: value for key, value in zip(commodity_list, url_list)
-    }
+    comm_list_dict = dict(zip(commodity_list, url_list))
     url = "https://stock.finance.sina.com.cn/futures/api/openapi.php/OptionService.getOptionData"
     params = {
         "type": "futures",

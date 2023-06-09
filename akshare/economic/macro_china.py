@@ -1208,8 +1208,7 @@ def macro_china_daily_energy() -> pd.DataFrame:
     value_df.index = pd.to_datetime(date_list)
     temp_df = value_df[["沿海六大电库存", "日耗", "存煤可用天数"]]
     temp_df.name = "energy"
-    temp_df = temp_df.astype(float)
-    return temp_df
+    return temp_df.astype(float)
 
 
 # 金十数据中心-经济指标-中国-其他-中国人民币汇率中间价报告
@@ -1398,7 +1397,7 @@ def macro_china_market_margin_sh() -> pd.DataFrame:
         int(str((temp_df.index[-1] - value_df.index[-1])).split(" ")[0]) / 20
     )
     big_df = temp_df
-    for i in tqdm(range(for_times)):
+    for _ in tqdm(range(for_times)):
         params = {
             "max_date": temp_df.index[-1],
             "category": "fs",
@@ -1510,8 +1509,7 @@ def macro_china_ctci_detail() -> pd.DataFrame:
     data_df.index = res.json()["names"]
     data_df.columns = ["-", "环比", "上期", "同比", "本期"]
     temp = data_df[["环比", "上期", "同比", "本期"]]
-    temp = temp.astype(float)
-    return temp
+    return temp.astype(float)
 
 
 # 发改委-中国电煤价格指数-历史电煤价格指数
@@ -1888,7 +1886,7 @@ def macro_china_vegetable_basket() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -1941,7 +1939,7 @@ def macro_china_agricultural_product() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -1994,7 +1992,7 @@ def macro_china_agricultural_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2047,7 +2045,7 @@ def macro_china_energy_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2100,7 +2098,7 @@ def macro_china_commodity_price_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2153,7 +2151,7 @@ def macro_global_sox_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2206,7 +2204,7 @@ def macro_china_yw_electronic_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2259,7 +2257,7 @@ def macro_china_construction_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2312,7 +2310,7 @@ def macro_china_construction_price_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2365,7 +2363,7 @@ def macro_china_lpi_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2418,7 +2416,7 @@ def macro_china_bdti_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2471,7 +2469,7 @@ def macro_china_bsi_index() -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2522,7 +2520,7 @@ def _em_macro_1(em_id) -> pd.DataFrame:
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update({"pageNumber": page})
+        params["pageNumber"] = page
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
@@ -2558,8 +2556,7 @@ def macro_shipping_bci() -> pd.DataFrame:
     :return: 海岬型运费指数
     :rtype: pandas.DataFrame
     """
-    ts = _em_macro_1("EMI00107666")
-    return ts
+    return _em_macro_1("EMI00107666")
 
 
 def macro_shipping_bdi() -> pd.DataFrame:
@@ -2569,8 +2566,7 @@ def macro_shipping_bdi() -> pd.DataFrame:
     :return: 波罗的海干散货指数
     :rtype: pandas.DataFrame
     """
-    ts = _em_macro_1("EMI00107664")
-    return ts
+    return _em_macro_1("EMI00107664")
 
 
 def macro_shipping_bpi() -> pd.DataFrame:
@@ -2580,8 +2576,7 @@ def macro_shipping_bpi() -> pd.DataFrame:
     :return: 巴拿马型运费指数
     :rtype: pandas.DataFrame
     """
-    ts = _em_macro_1("EMI00107665")
-    return ts
+    return _em_macro_1("EMI00107665")
 
 
 def macro_shipping_bcti() -> pd.DataFrame:
@@ -2591,8 +2586,7 @@ def macro_shipping_bcti() -> pd.DataFrame:
     :return: 成品油运输指数
     :rtype: pandas.DataFrame
     """
-    ts = _em_macro_1("EMI00107669")
-    return ts
+    return _em_macro_1("EMI00107669")
 
 
 def macro_china_new_financial_credit() -> pd.DataFrame:
@@ -3735,7 +3729,7 @@ def macro_china_society_electricity() -> pd.DataFrame:
     page_num = math.ceil(int(data_json["count"]) / 31)
     big_df = pd.DataFrame(data_json["data"])
     for i in range(1, page_num):
-        params.update({"from": i * 31})
+        params["from"] = i * 31
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -3])
@@ -3786,7 +3780,7 @@ def macro_china_society_traffic_volume() -> pd.DataFrame:
     page_num = math.ceil(int(data_json["count"]) / 31)
     big_df = pd.DataFrame(data_json["data"]["非累计"])
     for i in tqdm(range(1, page_num), leave=False):
-        params.update({"from": i * 31})
+        params["from"] = i * 31
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -3])
@@ -3818,7 +3812,7 @@ def macro_china_postal_telecommunicational() -> pd.DataFrame:
     page_num = math.ceil(int(data_json["count"]) / 31)
     big_df = pd.DataFrame(data_json["data"]["非累计"])
     for i in tqdm(range(1, page_num)):
-        params.update({"from": i * 31})
+        params["from"] = i * 31
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -3])
@@ -3852,7 +3846,7 @@ def macro_china_international_tourism_fx() -> pd.DataFrame:
     page_num = math.ceil(int(data_json["count"]) / 31)
     big_df = pd.DataFrame(data_json["data"])
     for i in tqdm(range(1, page_num)):
-        params.update({"from": i * 31})
+        params["from"] = i * 31
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -3])
@@ -3884,7 +3878,7 @@ def macro_china_passenger_load_factor() -> pd.DataFrame:
     page_num = math.ceil(int(data_json["count"]) / 31)
     big_df = pd.DataFrame(data_json["data"])
     for i in tqdm(range(1, page_num)):
-        params.update({"from": i * 31})
+        params["from"] = i * 31
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -3])
@@ -3916,7 +3910,7 @@ def _macro_china_freight_index() -> pd.DataFrame:
     page_num = math.ceil(int(data_json["count"]) / 31)
     big_df = pd.DataFrame(data_json["data"])
     for i in tqdm(range(1, page_num)):
-        params.update({"from": i * 31})
+        params["from"] = i * 31
         r = requests.get(url, params=params)
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -3])

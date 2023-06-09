@@ -47,8 +47,7 @@ def _get_global_index_area_name_code() -> dict:
         : len(url_list)
     ]
     _temp_df = pd.DataFrame([name_list, url_list_code]).T
-    name_code_list = dict(zip(_temp_df.iloc[:, 0], _temp_df.iloc[:, 1]))
-    return name_code_list
+    return dict(zip(_temp_df.iloc[:, 0], _temp_df.iloc[:, 1]))
 
 
 def _get_global_country_name_url() -> dict:
@@ -69,7 +68,7 @@ def _get_global_country_name_url() -> dict:
     url_list = [item["value"] for item in name_url_option_list]
     name_list = [item.get_text() for item in name_url_option_list]
     name_code_map_dict = {}
-    name_code_map_dict.update(zip(name_list, url_list))
+    name_code_map_dict |= zip(name_list, url_list)
     return name_code_map_dict
 
 
@@ -98,7 +97,7 @@ def index_investing_global_area_index_name_code(area: str = "中国") -> dict:
         for item in soup.find_all("td", attrs={"class": "plusIconTd"})
     ]
     name_code_map_dict = {}
-    name_code_map_dict.update(zip(name_list, code_list))
+    name_code_map_dict |= zip(name_list, code_list)
     return name_code_map_dict
 
 
@@ -125,7 +124,7 @@ def index_investing_global_area_index_name_url(area: str = "中国") -> dict:
         for item in soup.find_all("td", attrs={"class": "plusIconTd"})
     ]
     name_code_map_dict = {}
-    name_code_map_dict.update(zip(name_list, code_list))
+    name_code_map_dict |= zip(name_list, code_list)
     return name_code_map_dict
 
 

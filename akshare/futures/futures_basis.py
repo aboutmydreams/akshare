@@ -68,7 +68,7 @@ def futures_spot_price_daily(
         elif temp_df is not None:
             df_list.append(temp_df)
         start_day += datetime.timedelta(days=1)
-    if len(df_list) > 0:
+    if df_list:
         temp_df = pd.concat(df_list)
         temp_df.reset_index(drop=True, inplace=True)
         return temp_df
@@ -164,7 +164,15 @@ def _check_information(df_data, date):
             news = "PTA"
         else:
             news = "".join(re.findall(r"[\u4e00-\u9fa5]", string))
-        if news != "" and news not in ["商品", "价格", "上海期货交易所", "郑州商品交易所", "大连商品交易所", "广州期货交易所"]:
+        if news not in [
+            "",
+            "商品",
+            "价格",
+            "上海期货交易所",
+            "郑州商品交易所",
+            "大连商品交易所",
+            "广州期货交易所",
+        ]:
             symbol = chinese_to_english(news)
             record = pd.DataFrame(df_data[df_data["symbol"] == string])
             record.loc[:, "symbol"] = symbol
@@ -239,10 +247,7 @@ def _check_information(df_data, date):
 def _join_head(content: pd.DataFrame) -> List:
     headers = []
     for s1, s2 in zip(content.iloc[0], content.iloc[1]):
-        if s1 != s2:
-            s = f'{s1}{s2}'
-        else:
-            s = s1
+        s = f'{s1}{s2}' if s1 != s2 else s1
         headers.append(s)
     return headers
 

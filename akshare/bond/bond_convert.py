@@ -21,8 +21,7 @@ def bond_cb_index_jsl() -> pd.DataFrame:
     url = "https://www.jisilu.cn/webapi/cb/index_history/"
     r = requests.get(url)
     data_dict = demjson.decode(r.text)["data"]
-    temp_df = pd.DataFrame(data_dict)
-    return temp_df
+    return pd.DataFrame(data_dict)
 
 
 def bond_cb_jsl(cookie: str = None) -> pd.DataFrame:
@@ -287,15 +286,14 @@ def bond_cb_adj_logs_jsl(symbol: str = "128013") -> pd.DataFrame:
         # 2. 无效可转债代码，服务端返回 {"timestamp":1639565628,"isError":1,"msg":"无效代码格式"}
         # 以上两种情况，返回空的 DataFrame
         return
-    else:
-        temp_df = pd.read_html(data_text, parse_dates=True)[0]
-        temp_df.columns = [item.replace(" ", "") for item in temp_df.columns]
-        temp_df["下修前转股价"] = pd.to_numeric(temp_df["下修前转股价"], errors="coerce")
-        temp_df["下修后转股价"] = pd.to_numeric(temp_df["下修后转股价"], errors="coerce")
-        temp_df["下修底价"] = pd.to_numeric(temp_df["下修底价"], errors="coerce")
-        temp_df["股东大会日"] = pd.to_datetime(temp_df["股东大会日"]).dt.date
-        temp_df["新转股价生效日期"] = pd.to_datetime(temp_df["新转股价生效日期"]).dt.date
-        return temp_df
+    temp_df = pd.read_html(data_text, parse_dates=True)[0]
+    temp_df.columns = [item.replace(" ", "") for item in temp_df.columns]
+    temp_df["下修前转股价"] = pd.to_numeric(temp_df["下修前转股价"], errors="coerce")
+    temp_df["下修后转股价"] = pd.to_numeric(temp_df["下修后转股价"], errors="coerce")
+    temp_df["下修底价"] = pd.to_numeric(temp_df["下修底价"], errors="coerce")
+    temp_df["股东大会日"] = pd.to_datetime(temp_df["股东大会日"]).dt.date
+    temp_df["新转股价生效日期"] = pd.to_datetime(temp_df["新转股价生效日期"]).dt.date
+    return temp_df
 
 
 if __name__ == "__main__":

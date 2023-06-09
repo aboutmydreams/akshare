@@ -30,7 +30,7 @@ def google_index(
     pytrends = TrendReq(hl="en-US", tz=360)
     kw_list = [symbol]
     pytrends.build_payload(
-        kw_list, cat=0, timeframe=start_date + " " + end_date, geo="", gprop=""
+        kw_list, cat=0, timeframe=f"{start_date} {end_date}", geo="", gprop=""
     )
     search_df = pytrends.interest_over_time()
     search_se = search_df[symbol]

@@ -88,14 +88,12 @@ def rate_interbank(
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     for page in tqdm(range(1, total_page + 1), leave=False):
-        params.update(
-            {
-                "pageNumber": page,
-                "p": page,
-                "pageNo": page,
-                "pageNum": page,
-            }
-        )
+        params |= {
+            "pageNumber": page,
+            "p": page,
+            "pageNo": page,
+            "pageNum": page,
+        }
         r = requests.get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])

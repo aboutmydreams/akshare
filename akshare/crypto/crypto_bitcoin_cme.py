@@ -43,11 +43,10 @@ def crypto_bitcoin_cme(date: str = "20210609") -> pd.DataFrame:
     }
     r = requests.get(url, params=params, headers=headers)
     data_json = r.json()
-    temp_df = pd.DataFrame(
-        [item for item in data_json["data"]["values"]],
+    return pd.DataFrame(
+        list(data_json["data"]["values"]),
         columns=[item["name"] for item in data_json["data"]["keys"]],
     )
-    return temp_df
 
 
 if __name__ == "__main__":

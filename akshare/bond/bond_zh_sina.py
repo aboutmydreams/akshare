@@ -35,10 +35,7 @@ def get_zh_bond_hs_page_count() -> int:
     }
     res = requests.get(zh_sina_bond_hs_count_url, params=params)
     page_count = int(re.findall(re.compile(r"\d+"), res.text)[0]) / 80
-    if isinstance(page_count, int):
-        return page_count
-    else:
-        return int(page_count) + 1
+    return page_count if isinstance(page_count, int) else int(page_count) + 1
 
 
 def bond_zh_hs_spot() -> pd.DataFrame:

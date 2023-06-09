@@ -54,8 +54,7 @@ def nlp_answer(question: str = "人工智能") -> str:
     }
     r = requests.get(url, params=params)
     json_data = r.json()
-    answer = json_data['data']['info']['text']
-    return answer
+    return json_data['data']['info']['text']
 
 
 if __name__ == "__main__":

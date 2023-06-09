@@ -4,6 +4,7 @@
 Date: 2021/1/10 13:58
 Desc: 得到 99 期货网的原始数据
 """
+
 import requests
 import pickle
 from bs4 import BeautifulSoup
@@ -47,9 +48,7 @@ code_exchange_name_dict = dict(zip(code_temp_list, name_temp_list))
 exchange_value = soup.find_all("select")[0].find_all(attrs={"selected": "selected"})[0]["value"]
 symbol_list = soup.find_all("select")[1].get_text().split("\n")[1:-1]
 symbol_value_list = [item["value"] for item in soup.find_all("select")[1].find_all("option")]
-code_symbol_code_dict = dict()
-code_symbol_code_dict[exchange_value] = symbol_value_list
-
+code_symbol_code_dict = {exchange_value: symbol_value_list}
 exchange_symbol_list = {}
 exchange_symbol_value_list = {}
 for i in code_temp_list:
@@ -76,9 +75,9 @@ for i in code_temp_list:
             exchange_value = soup.find_all("select")[0].find_all(attrs={"selected": "selected"})[0]["value"]
             print(exchange_value)
             symbol_list = soup.find_all("select")[1].get_text().split("\n")[1:-1]
-            exchange_symbol_list.update({exchange_value: symbol_list})
+            exchange_symbol_list[exchange_value] = symbol_list
             symbol_value_list = [item["value"] for item in soup.find_all("select")[1].find_all("option")]
-            exchange_symbol_value_list.update({exchange_value: symbol_value_list})
+            exchange_symbol_value_list[exchange_value] = symbol_value_list
             view_state = soup.find_all(attrs={"id": "__VIEWSTATE"})[0]["value"]
             even_validation = soup.find_all(attrs={"id": "__EVENTVALIDATION"})[0]["value"]
             time.sleep(5)

@@ -39,7 +39,17 @@ def index_yw(symbol: str = "月景气指数") -> pd.DataFrame:
         .split("\n\n\n\n\n")[3]
         .split("\n\n")
     )
-    if symbol == "月景气指数":
+    if symbol in {"周价格指数", "月价格指数"}:
+        table_df = pd.DataFrame([item.split("\n") for item in table_content]).iloc[:, :6]
+        table_df.columns = table_name
+        table_df['期数'] = pd.to_datetime(table_df['期数']).dt.date
+        table_df['价格指数'] = pd.to_numeric(table_df['价格指数'])
+        table_df['场内价格指数'] = pd.to_numeric(table_df['场内价格指数'])
+        table_df['网上价格指数'] = pd.to_numeric(table_df['网上价格指数'])
+        table_df['订单价格指数'] = pd.to_numeric(table_df['订单价格指数'])
+        table_df['出口价格指数'] = pd.to_numeric(table_df['出口价格指数'])
+        return table_df
+    elif symbol == "月景气指数":
         table_df = pd.DataFrame([item.split("\n") for item in table_content]).iloc[
             :, :5
         ]
@@ -49,26 +59,6 @@ def index_yw(symbol: str = "月景气指数") -> pd.DataFrame:
         table_df['规模指数'] = pd.to_numeric(table_df['规模指数'])
         table_df['效益指数'] = pd.to_numeric(table_df['效益指数'])
         table_df['市场信心指数'] = pd.to_numeric(table_df['市场信心指数'])
-        return table_df
-    elif symbol == "周价格指数":
-        table_df = pd.DataFrame([item.split("\n") for item in table_content]).iloc[:, :6]
-        table_df.columns = table_name
-        table_df['期数'] = pd.to_datetime(table_df['期数']).dt.date
-        table_df['价格指数'] = pd.to_numeric(table_df['价格指数'])
-        table_df['场内价格指数'] = pd.to_numeric(table_df['场内价格指数'])
-        table_df['网上价格指数'] = pd.to_numeric(table_df['网上价格指数'])
-        table_df['订单价格指数'] = pd.to_numeric(table_df['订单价格指数'])
-        table_df['出口价格指数'] = pd.to_numeric(table_df['出口价格指数'])
-        return table_df
-    elif symbol == "月价格指数":
-        table_df = pd.DataFrame([item.split("\n") for item in table_content]).iloc[:, :6]
-        table_df.columns = table_name
-        table_df['期数'] = pd.to_datetime(table_df['期数']).dt.date
-        table_df['价格指数'] = pd.to_numeric(table_df['价格指数'])
-        table_df['场内价格指数'] = pd.to_numeric(table_df['场内价格指数'])
-        table_df['网上价格指数'] = pd.to_numeric(table_df['网上价格指数'])
-        table_df['订单价格指数'] = pd.to_numeric(table_df['订单价格指数'])
-        table_df['出口价格指数'] = pd.to_numeric(table_df['出口价格指数'])
         return table_df
 
 
